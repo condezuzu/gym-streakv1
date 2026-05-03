@@ -1,6 +1,8 @@
 /* =========================================
-   VARIABLES Y RESET
+   GYM TRACKER v2.0 - style.css
    ========================================= */
+
+/* ----- VARIABLES Y RESET ----- */
 :root {
     /* Paleta principal (grises) */
     --sharp-pebbles: #dbd6d8;
@@ -10,14 +12,21 @@
     --night-watch: #3b4f4e;
     --black-feather: #0b2124;
 
-    /* Colores funcionales */
+    /* Fondos */
     --bg-primary: #0b2124;
     --bg-secondary: #142c30;
     --bg-tertiary: #1d3a3e;
+    --bg-elevated: #234447;
+
+    /* Textos */
     --text-primary: #dbd6d8;
     --text-secondary: #989f9b;
     --text-muted: #6e7773;
+    --text-faded: #4a5a5d;
+
+    /* Bordes */
     --border: #3b4f4e;
+    --border-light: #4a5e60;
 
     /* Estados de día */
     --day-rest: #2d4a3a;
@@ -25,10 +34,20 @@
     --day-future: #1a3034;
     --day-empty: #14252a;
 
+    /* Colores de tier (rangos) */
+    --tier-1: #ff2e2e;     /* Iniciante - Rojo */
+    --tier-2: #ff7a2e;     /* Constante - Naranja */
+    --tier-3: #ff3e8e;     /* Comprometido - Magenta */
+    --tier-4: #b03eff;     /* Disciplinado - Violeta */
+    --tier-5: #3e8eff;     /* Imparable - Azul */
+    --tier-6: #6ec8ff;     /* Dedicado - Azul claro */
+    --tier-7: #c8eaff;     /* Élite - Casi blanco */
+    --tier-8: #ffffff;     /* Leyenda - Blanco */
+
     /* Sombras */
-    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.2);
-    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.3);
-    --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.4);
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.5);
 }
 
 * {
@@ -44,12 +63,16 @@ html, body {
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     background-color: var(--bg-primary);
     color: var(--text-primary);
     font-size: 16px;
     line-height: 1.5;
     overscroll-behavior: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-feature-settings: 'cv11', 'ss01';
+    letter-spacing: -0.01em;
 }
 
 button {
@@ -60,9 +83,52 @@ button {
     color: inherit;
 }
 
-/* =========================================
-   PANTALLAS
-   ========================================= */
+/* ----- AURA DEL FONDO (cambia según rango) ----- */
+.background-aura {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background: radial-gradient(
+        ellipse 90% 60% at 50% 0%,
+        rgba(110, 119, 115, 0.25) 0%,
+        rgba(110, 119, 115, 0.10) 30%,
+        transparent 70%
+    );
+    transition: background 1.2s ease;
+}
+
+.background-aura.tier-1 {
+    background: radial-gradient(ellipse 90% 60% at 50% 0%, rgba(255, 46, 46, 0.28) 0%, rgba(255, 46, 46, 0.10) 30%, transparent 70%);
+}
+.background-aura.tier-2 {
+    background: radial-gradient(ellipse 90% 60% at 50% 0%, rgba(255, 122, 46, 0.28) 0%, rgba(255, 122, 46, 0.10) 30%, transparent 70%);
+}
+.background-aura.tier-3 {
+    background: radial-gradient(ellipse 90% 60% at 50% 0%, rgba(255, 62, 142, 0.28) 0%, rgba(255, 62, 142, 0.10) 30%, transparent 70%);
+}
+.background-aura.tier-4 {
+    background: radial-gradient(ellipse 90% 60% at 50% 0%, rgba(176, 62, 255, 0.28) 0%, rgba(176, 62, 255, 0.10) 30%, transparent 70%);
+}
+.background-aura.tier-5 {
+    background: radial-gradient(ellipse 90% 60% at 50% 0%, rgba(62, 142, 255, 0.30) 0%, rgba(62, 142, 255, 0.12) 30%, transparent 70%);
+}
+.background-aura.tier-6 {
+    background: radial-gradient(ellipse 90% 60% at 50% 0%, rgba(110, 200, 255, 0.30) 0%, rgba(110, 200, 255, 0.12) 30%, transparent 70%);
+}
+.background-aura.tier-7 {
+    background: radial-gradient(ellipse 90% 60% at 50% 0%, rgba(200, 234, 255, 0.32) 0%, rgba(200, 234, 255, 0.14) 30%, transparent 70%);
+}
+.background-aura.tier-8 {
+    background: radial-gradient(ellipse 90% 60% at 50% 0%, rgba(255, 255, 255, 0.30) 0%, rgba(255, 255, 255, 0.14) 30%, transparent 70%);
+}
+
+/* Cuando NO estamos en home, el aura se oculta */
+.background-aura.hidden {
+    opacity: 0;
+}
+
+/* ----- PANTALLAS ----- */
 .screen {
     display: none;
     position: fixed;
@@ -76,120 +142,166 @@ button {
     display: flex;
 }
 
-.screen > *:not(.bottom-nav) {
-    flex-shrink: 0;
+/* Animaciones de entrada de pantalla (slide horizontal) */
+.screen.slide-in-right {
+    animation: slideInRight 0.28s ease-out;
 }
 
-/* =========================================
-   HEADER PRINCIPAL
-   ========================================= */
+.screen.slide-in-left {
+    animation: slideInLeft 0.28s ease-out;
+}
+
+@keyframes slideInRight {
+    from { transform: translateX(100%); opacity: 0.5; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slideInLeft {
+    from { transform: translateX(-100%); opacity: 0.5; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+/* ----- HOME ----- */
+.home-content {
+    flex: 1;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    display: flex;
+    flex-direction: column;
+}
+
 .home-header {
-    padding: 32px 24px 24px;
+    padding: 28px 24px 16px;
     text-align: center;
+    position: relative;
 }
 
-.home-header h1 {
-    font-size: 22px;
-    font-weight: 700;
+.app-title {
+    font-size: 11px;
+    font-weight: 600;
     letter-spacing: 4px;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+}
+
+.greeting {
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
     color: var(--text-primary);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+    min-height: 40px;
 }
 
-.screen-header {
-    padding: 24px 20px 16px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 12px;
+.greeting.fade-out {
+    opacity: 0;
+    transform: translateY(-10px);
 }
 
-.screen-header h2 {
-    font-size: 24px;
-    font-weight: 600;
-    letter-spacing: 1px;
+.status-message {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-top: 6px;
+    font-weight: 500;
+    transition: opacity 0.6s ease;
+    min-height: 22px;
 }
 
-.year-selector {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    background-color: var(--bg-secondary);
-    border-radius: 24px;
-    padding: 4px 8px;
-}
-
-.year-selector button {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    color: var(--text-primary);
-    font-size: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background-color 0.2s;
-}
-
-.year-selector button:active {
-    background-color: var(--bg-tertiary);
-}
-
-.year-selector span {
-    font-weight: 600;
-    min-width: 50px;
-    text-align: center;
-}
-
-/* =========================================
-   STATS (HOME)
-   ========================================= */
+/* ----- STATS ----- */
 .stats-container {
-    padding: 16px 20px;
+    padding: 12px 20px 16px;
     display: flex;
     flex-direction: column;
     gap: 12px;
 }
 
 .stat-card {
-    background-color: var(--bg-secondary);
-    border-radius: 16px;
-    padding: 24px;
+    background: linear-gradient(145deg, var(--bg-secondary), var(--bg-tertiary));
+    border-radius: 18px;
+    padding: 22px 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
     border: 1px solid var(--border);
-    transition: transform 0.2s;
+    box-shadow: var(--shadow-md), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    position: relative;
+    overflow: hidden;
 }
 
 .stat-card.streak-card {
-    background: linear-gradient(135deg, var(--bg-secondary), var(--bg-tertiary));
-    padding: 32px 24px;
+    background: linear-gradient(145deg, var(--bg-secondary), var(--bg-elevated));
+    padding: 28px 24px 20px;
+}
+
+.stat-card.streak-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0%, transparent 50%);
+    pointer-events: none;
 }
 
 .stat-label {
-    font-size: 13px;
+    font-size: 11px;
     color: var(--text-secondary);
     text-transform: uppercase;
-    letter-spacing: 1.5px;
+    letter-spacing: 1.8px;
+    font-weight: 600;
+}
+
+.stat-label-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
     margin-bottom: 8px;
+    color: var(--text-secondary);
+}
+
+.stat-icon {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+}
+
+.streak-number-wrapper {
+    margin: 8px 0 4px;
+    position: relative;
 }
 
 .stat-value {
-    font-size: 56px;
-    font-weight: 700;
+    font-size: 44px;
+    font-weight: 800;
     color: var(--text-primary);
     line-height: 1;
+    letter-spacing: -2px;
+    font-feature-settings: 'tnum';
+    transition: color 0.5s ease, text-shadow 0.5s ease;
 }
 
+.streak-value {
+    font-size: 72px;
+    letter-spacing: -3px;
+}
+
+/* Glow del número según tier */
+.streak-value.tier-1 { color: var(--tier-1); text-shadow: 0 0 24px rgba(255, 46, 46, 0.5); }
+.streak-value.tier-2 { color: var(--tier-2); text-shadow: 0 0 24px rgba(255, 122, 46, 0.5); }
+.streak-value.tier-3 { color: var(--tier-3); text-shadow: 0 0 24px rgba(255, 62, 142, 0.5); }
+.streak-value.tier-4 { color: var(--tier-4); text-shadow: 0 0 24px rgba(176, 62, 255, 0.5); }
+.streak-value.tier-5 { color: var(--tier-5); text-shadow: 0 0 24px rgba(62, 142, 255, 0.55); }
+.streak-value.tier-6 { color: var(--tier-6); text-shadow: 0 0 24px rgba(110, 200, 255, 0.55); }
+.streak-value.tier-7 { color: var(--tier-7); text-shadow: 0 0 28px rgba(200, 234, 255, 0.6); }
+.streak-value.tier-8 { color: var(--tier-8); text-shadow: 0 0 32px rgba(255, 255, 255, 0.65); }
+
 .stat-card.small .stat-value {
-    font-size: 36px;
+    font-size: 32px;
 }
 
 .stat-unit {
-    font-size: 14px;
+    font-size: 13px;
     color: var(--text-muted);
-    margin-top: 4px;
+    margin-top: 2px;
+    font-weight: 500;
 }
 
 .stats-row {
@@ -198,50 +310,185 @@ button {
     gap: 12px;
 }
 
-/* =========================================
-   BOTÓN PRINCIPAL DE REGISTRAR
-   ========================================= */
+.stats-row .stat-card {
+    align-items: flex-start;
+    padding: 18px;
+}
+
+/* Rank badge (nombre del rango) */
+.rank-badge {
+    margin-top: 14px;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    border: 1.5px solid currentColor;
+    transition: all 0.4s ease;
+    opacity: 0;
+    transform: scale(0.9);
+}
+
+.rank-badge.visible {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.rank-badge.tier-1 { color: var(--tier-1); box-shadow: 0 0 16px rgba(255, 46, 46, 0.25); }
+.rank-badge.tier-2 { color: var(--tier-2); box-shadow: 0 0 16px rgba(255, 122, 46, 0.25); }
+.rank-badge.tier-3 { color: var(--tier-3); box-shadow: 0 0 16px rgba(255, 62, 142, 0.25); }
+.rank-badge.tier-4 { color: var(--tier-4); box-shadow: 0 0 16px rgba(176, 62, 255, 0.25); }
+.rank-badge.tier-5 { color: var(--tier-5); box-shadow: 0 0 16px rgba(62, 142, 255, 0.3); }
+.rank-badge.tier-6 { color: var(--tier-6); box-shadow: 0 0 16px rgba(110, 200, 255, 0.3); }
+.rank-badge.tier-7 { color: var(--tier-7); box-shadow: 0 0 18px rgba(200, 234, 255, 0.35); }
+.rank-badge.tier-8 { color: var(--tier-8); box-shadow: 0 0 22px rgba(255, 255, 255, 0.4); }
+
+/* ----- BOTÓN REGISTRAR (con doble pulso) ----- */
 .register-button {
-    margin: 24px 20px 0;
-    padding: 20px;
+    margin: 16px 20px 0;
+    padding: 18px;
     background: linear-gradient(135deg, var(--night-watch), var(--arctic-lichen));
     color: var(--text-primary);
     border-radius: 16px;
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 700;
     letter-spacing: 2px;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 12px;
+    gap: 10px;
     box-shadow: var(--shadow-md);
     transition: transform 0.15s, box-shadow 0.15s;
+    animation: registerPulse 2.4s ease-in-out infinite;
+    position: relative;
 }
 
 .register-button:active {
-    transform: scale(0.98);
+    transform: scale(0.97);
     box-shadow: var(--shadow-sm);
+    animation-play-state: paused;
+}
+
+.register-button.disabled {
+    animation: none;
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+@keyframes registerPulse {
+    0%, 100% {
+        transform: scale(1);
+        box-shadow: var(--shadow-md), 0 0 0 0 rgba(110, 119, 115, 0.5);
+    }
+    50% {
+        transform: scale(1.018);
+        box-shadow: var(--shadow-md), 0 0 32px 4px rgba(110, 119, 115, 0.35);
+    }
 }
 
 .register-icon {
-    font-size: 24px;
+    font-size: 22px;
     font-weight: 300;
 }
 
-/* =========================================
-   NAVEGACIÓN INFERIOR
-   ========================================= */
+.register-label {
+    font-weight: 700;
+}
+
+/* ----- FRASE DEL DÍA (sutil) ----- */
+.daily-quote {
+    margin-top: auto;
+    padding: 32px 28px 16px;
+    text-align: center;
+    opacity: 0.35;
+    transition: opacity 0.5s ease;
+}
+
+.daily-quote:hover {
+    opacity: 0.6;
+}
+
+.quote-text {
+    font-size: 12px;
+    font-style: italic;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin-bottom: 4px;
+    font-weight: 400;
+}
+
+.quote-author {
+    font-size: 10px;
+    color: var(--text-muted);
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+/* ----- HEADER GENERAL ----- */
+.screen-header {
+    padding: 24px 20px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.screen-header h2 {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+}
+
+.year-selector {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(145deg, var(--bg-secondary), var(--bg-tertiary));
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 4px 6px;
+}
+
+.year-selector button {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    color: var(--text-primary);
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
+}
+
+.year-selector button:active {
+    background-color: var(--bg-elevated);
+}
+
+.year-selector span {
+    font-weight: 600;
+    min-width: 50px;
+    text-align: center;
+    font-size: 14px;
+    font-feature-settings: 'tnum';
+}
+
+/* ----- NAVEGACIÓN INFERIOR ----- */
 .bottom-nav {
     position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
-    background-color: var(--bg-secondary);
+    background: linear-gradient(180deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
     border-top: 1px solid var(--border);
     display: flex;
     justify-content: space-around;
     padding: 8px 0 calc(8px + env(safe-area-inset-bottom));
     z-index: 100;
+    backdrop-filter: blur(8px);
 }
 
 .nav-btn {
@@ -249,10 +496,11 @@ button {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 2px;
-    padding: 8px 4px;
+    gap: 3px;
+    padding: 6px 4px;
     color: var(--text-muted);
-    font-size: 11px;
+    font-size: 10px;
+    font-weight: 500;
     transition: color 0.2s;
 }
 
@@ -260,19 +508,23 @@ button {
     color: var(--text-primary);
 }
 
-.nav-icon {
-    font-size: 22px;
-    line-height: 1;
+.nav-btn.active .nav-icon {
+    fill: currentColor;
+    fill-opacity: 0.15;
 }
 
-/* =========================================
-   CALENDARIO
-   ========================================= */
+.nav-icon {
+    width: 22px;
+    height: 22px;
+    stroke-width: 2;
+}
+
+/* ----- CALENDARIO ----- */
 .calendar-legend {
     display: flex;
     justify-content: center;
-    gap: 16px;
-    padding: 8px 16px 16px;
+    gap: 14px;
+    padding: 4px 16px 16px;
     flex-wrap: wrap;
 }
 
@@ -280,19 +532,20 @@ button {
     display: flex;
     align-items: center;
     gap: 6px;
-    font-size: 12px;
+    font-size: 11px;
     color: var(--text-secondary);
+    font-weight: 500;
 }
 
 .legend-dot {
-    width: 12px;
-    height: 12px;
+    width: 11px;
+    height: 11px;
     border-radius: 3px;
     display: inline-block;
 }
 
 .legend-dot.registered {
-    background: linear-gradient(135deg, #ff2e2e, #ff7e2e);
+    background: linear-gradient(135deg, #ff2e2e, #ff7a2e);
 }
 
 .legend-dot.rest {
@@ -315,11 +568,12 @@ button {
 }
 
 .month-title {
-    font-size: 18px;
-    font-weight: 600;
+    font-size: 17px;
+    font-weight: 700;
     margin-bottom: 12px;
     color: var(--text-primary);
     text-transform: capitalize;
+    letter-spacing: -0.2px;
 }
 
 .weekdays {
@@ -331,10 +585,12 @@ button {
 
 .weekday {
     text-align: center;
-    font-size: 11px;
+    font-size: 10px;
     color: var(--text-muted);
     text-transform: uppercase;
     padding: 4px 0;
+    font-weight: 600;
+    letter-spacing: 1px;
 }
 
 .days-grid {
@@ -346,7 +602,7 @@ button {
 .day {
     aspect-ratio: 1;
     background-color: var(--day-empty);
-    border-radius: 6px;
+    border-radius: 7px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -354,6 +610,8 @@ button {
     color: var(--text-secondary);
     transition: transform 0.15s;
     position: relative;
+    font-feature-settings: 'tnum';
+    font-weight: 500;
 }
 
 .day.empty {
@@ -363,12 +621,71 @@ button {
 
 .day.future {
     background-color: var(--day-future);
-    color: var(--text-muted);
+    color: var(--text-faded);
 }
 
+/* Día de hoy con anillo pulsante */
 .day.today {
-    border: 2px solid var(--text-primary);
     font-weight: 700;
+    z-index: 2;
+}
+
+.day.today::after {
+    content: '';
+    position: absolute;
+    inset: -3px;
+    border-radius: 10px;
+    border: 2px solid var(--text-primary);
+    animation: todayPulse 2s ease-in-out infinite;
+    pointer-events: none;
+}
+
+/* Cuando hoy está registrado, el anillo toma el color del tier */
+.day.today.registered.tier-1::after { border-color: var(--tier-1); animation-name: todayPulseColor1; }
+.day.today.registered.tier-2::after { border-color: var(--tier-2); animation-name: todayPulseColor2; }
+.day.today.registered.tier-3::after { border-color: var(--tier-3); animation-name: todayPulseColor3; }
+.day.today.registered.tier-4::after { border-color: var(--tier-4); animation-name: todayPulseColor4; }
+.day.today.registered.tier-5::after { border-color: var(--tier-5); animation-name: todayPulseColor5; }
+.day.today.registered.tier-6::after { border-color: var(--tier-6); animation-name: todayPulseColor6; }
+.day.today.registered.tier-7::after { border-color: var(--tier-7); animation-name: todayPulseColor7; }
+.day.today.registered.tier-8::after { border-color: var(--tier-8); animation-name: todayPulseColor8; }
+
+@keyframes todayPulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(219, 214, 216, 0.5); transform: scale(1); }
+    50% { box-shadow: 0 0 0 6px rgba(219, 214, 216, 0); transform: scale(1.05); }
+}
+
+@keyframes todayPulseColor1 {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(255, 46, 46, 0.6); transform: scale(1); }
+    50% { box-shadow: 0 0 0 6px rgba(255, 46, 46, 0); transform: scale(1.05); }
+}
+@keyframes todayPulseColor2 {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(255, 122, 46, 0.6); transform: scale(1); }
+    50% { box-shadow: 0 0 0 6px rgba(255, 122, 46, 0); transform: scale(1.05); }
+}
+@keyframes todayPulseColor3 {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(255, 62, 142, 0.6); transform: scale(1); }
+    50% { box-shadow: 0 0 0 6px rgba(255, 62, 142, 0); transform: scale(1.05); }
+}
+@keyframes todayPulseColor4 {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(176, 62, 255, 0.6); transform: scale(1); }
+    50% { box-shadow: 0 0 0 6px rgba(176, 62, 255, 0); transform: scale(1.05); }
+}
+@keyframes todayPulseColor5 {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(62, 142, 255, 0.6); transform: scale(1); }
+    50% { box-shadow: 0 0 0 6px rgba(62, 142, 255, 0); transform: scale(1.05); }
+}
+@keyframes todayPulseColor6 {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(110, 200, 255, 0.6); transform: scale(1); }
+    50% { box-shadow: 0 0 0 6px rgba(110, 200, 255, 0); transform: scale(1.05); }
+}
+@keyframes todayPulseColor7 {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(200, 234, 255, 0.7); transform: scale(1); }
+    50% { box-shadow: 0 0 0 6px rgba(200, 234, 255, 0); transform: scale(1.05); }
+}
+@keyframes todayPulseColor8 {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7); transform: scale(1); }
+    50% { box-shadow: 0 0 0 6px rgba(255, 255, 255, 0); transform: scale(1.05); }
 }
 
 .day.rest {
@@ -383,7 +700,7 @@ button {
 
 .day.registered {
     color: #ffffff;
-    font-weight: 600;
+    font-weight: 700;
     cursor: pointer;
 }
 
@@ -393,28 +710,26 @@ button {
 
 /* Niveles de racha (cada 10 días) */
 .day.tier-1 { background: linear-gradient(135deg, #ff1e1e, #ff5e2e); }
-.day.tier-2 { background: linear-gradient(135deg, #ff5e2e, #ff3e8e); }
+.day.tier-2 { background: linear-gradient(135deg, #ff7a2e, #ff3e8e); }
 .day.tier-3 { background: linear-gradient(135deg, #ff3e8e, #c83eff); }
-.day.tier-4 { background: linear-gradient(135deg, #c83eff, #6e3eff); }
-.day.tier-5 { background: linear-gradient(135deg, #4e6eff, #3e9eff); }
-.day.tier-6 { background: linear-gradient(135deg, #3e9eff, #6ec8ff); }
-.day.tier-7 { background: linear-gradient(135deg, #8edaff, #c8eaff); }
+.day.tier-4 { background: linear-gradient(135deg, #b03eff, #6e3eff); }
+.day.tier-5 { background: linear-gradient(135deg, #3e8eff, #6ec8ff); }
+.day.tier-6 { background: linear-gradient(135deg, #6ec8ff, #c8eaff); color: #0b2124; }
+.day.tier-7 { background: linear-gradient(135deg, #c8eaff, #ffffff); color: #0b2124; }
 .day.tier-8 {
-    background: linear-gradient(135deg, #ffffff, #e8f4ff);
+    background: linear-gradient(135deg, #ffffff, #f0f8ff);
     color: #0b2124;
-    box-shadow: 0 0 12px rgba(255, 255, 255, 0.4);
+    box-shadow: 0 0 14px rgba(255, 255, 255, 0.5);
 }
 
-/* =========================================
-   GALERÍA
-   ========================================= */
+/* ----- GALERÍA ----- */
 .gallery-grid {
     flex: 1;
     overflow-y: auto;
     padding: 8px;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 4px;
+    gap: 6px;
     align-content: start;
     -webkit-overflow-scrolling: touch;
 }
@@ -422,16 +737,27 @@ button {
 .gallery-item {
     aspect-ratio: 1;
     background-color: var(--bg-secondary);
-    border-radius: 4px;
+    border-radius: 8px;
     overflow: hidden;
     cursor: pointer;
     position: relative;
     transition: transform 0.15s;
+    border: 3px solid var(--border);
 }
 
 .gallery-item:active {
-    transform: scale(0.95);
+    transform: scale(0.94);
 }
+
+/* Marcos de la galería según tier */
+.gallery-item.tier-1 { border-color: var(--tier-1); box-shadow: 0 0 12px rgba(255, 46, 46, 0.3); }
+.gallery-item.tier-2 { border-color: var(--tier-2); box-shadow: 0 0 12px rgba(255, 122, 46, 0.3); }
+.gallery-item.tier-3 { border-color: var(--tier-3); box-shadow: 0 0 12px rgba(255, 62, 142, 0.3); }
+.gallery-item.tier-4 { border-color: var(--tier-4); box-shadow: 0 0 12px rgba(176, 62, 255, 0.3); }
+.gallery-item.tier-5 { border-color: var(--tier-5); box-shadow: 0 0 12px rgba(62, 142, 255, 0.35); }
+.gallery-item.tier-6 { border-color: var(--tier-6); box-shadow: 0 0 12px rgba(110, 200, 255, 0.35); }
+.gallery-item.tier-7 { border-color: var(--tier-7); box-shadow: 0 0 14px rgba(200, 234, 255, 0.4); }
+.gallery-item.tier-8 { border-color: var(--tier-8); box-shadow: 0 0 18px rgba(255, 255, 255, 0.45); }
 
 .gallery-item img {
     width: 100%;
@@ -444,12 +770,13 @@ button {
     bottom: 0;
     left: 0;
     right: 0;
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.85), transparent);
     color: white;
     font-size: 10px;
-    padding: 12px 6px 4px;
+    padding: 14px 6px 4px;
     text-align: center;
     font-weight: 600;
+    font-feature-settings: 'tnum';
 }
 
 .gallery-empty {
@@ -470,6 +797,7 @@ button {
 .gallery-empty p {
     font-size: 16px;
     margin-bottom: 8px;
+    font-weight: 500;
 }
 
 .gallery-empty .subtitle {
@@ -477,9 +805,7 @@ button {
     color: var(--text-muted);
 }
 
-/* =========================================
-   AJUSTES
-   ========================================= */
+/* ----- AJUSTES ----- */
 .settings-content {
     flex: 1;
     overflow-y: auto;
@@ -488,23 +814,25 @@ button {
 }
 
 .settings-block {
-    background-color: var(--bg-secondary);
+    background: linear-gradient(145deg, var(--bg-secondary), var(--bg-tertiary));
     border-radius: 16px;
     padding: 20px;
-    margin-bottom: 16px;
+    margin-bottom: 14px;
     border: 1px solid var(--border);
+    box-shadow: var(--shadow-sm), inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
 
 .settings-block h3 {
-    font-size: 16px;
-    font-weight: 600;
-    margin-bottom: 8px;
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    letter-spacing: -0.2px;
 }
 
 .settings-description {
-    font-size: 13px;
+    font-size: 12px;
     color: var(--text-secondary);
-    margin-bottom: 16px;
+    margin-bottom: 14px;
 }
 
 .rest-days-grid {
@@ -514,14 +842,15 @@ button {
 }
 
 .rest-day-btn {
-    background-color: var(--bg-tertiary);
+    background-color: var(--bg-elevated);
     color: var(--text-secondary);
-    padding: 12px 4px;
+    padding: 11px 4px;
     border-radius: 12px;
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 600;
     transition: all 0.2s;
-    border: 2px solid transparent;
+    border: 1.5px solid transparent;
+    letter-spacing: 0.3px;
 }
 
 .rest-day-btn.active {
@@ -534,12 +863,13 @@ button {
     width: 100%;
     background-color: transparent;
     color: #ff6e6e;
-    padding: 14px;
+    padding: 13px;
     border-radius: 12px;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 600;
     border: 1px solid #ff6e6e;
     transition: background-color 0.2s;
+    letter-spacing: 0.2px;
 }
 
 .danger-button:active {
@@ -552,27 +882,27 @@ button {
 }
 
 .info-block p {
-    font-size: 13px;
+    font-size: 12px;
 }
 
 .info-block .version {
-    font-size: 11px;
-    margin-top: 4px;
+    font-size: 10px;
+    margin-top: 2px;
+    color: var(--text-faded);
 }
 
-/* =========================================
-   MODALES
-   ========================================= */
+/* ----- MODALES ----- */
 .modal {
     display: none;
     position: fixed;
     inset: 0;
-    background-color: rgba(0, 0, 0, 0.85);
+    background-color: rgba(0, 0, 0, 0.88);
     z-index: 200;
     align-items: center;
     justify-content: center;
     padding: 20px;
     animation: fadeIn 0.2s ease-out;
+    backdrop-filter: blur(4px);
 }
 
 .modal.active {
@@ -585,19 +915,23 @@ button {
 }
 
 .modal-content {
-    background-color: var(--bg-secondary);
+    background: linear-gradient(145deg, var(--bg-secondary), var(--bg-tertiary));
     border-radius: 20px;
-    padding: 28px 24px;
+    padding: 26px 22px;
     width: 100%;
     max-width: 400px;
     border: 1px solid var(--border);
+    box-shadow: var(--shadow-lg);
     animation: slideUp 0.25s ease-out;
 }
 
 .modal-content.full {
     max-width: 500px;
-    padding: 20px;
+    padding: 16px;
     position: relative;
+    background: var(--bg-primary);
+    border: none;
+    box-shadow: none;
 }
 
 @keyframes slideUp {
@@ -606,30 +940,33 @@ button {
 }
 
 .modal-content h3 {
-    font-size: 18px;
-    font-weight: 600;
-    margin-bottom: 20px;
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 18px;
     text-align: center;
+    letter-spacing: -0.2px;
 }
 
 .modal-description {
     text-align: center;
     color: var(--text-secondary);
-    font-size: 14px;
-    margin-bottom: 20px;
+    font-size: 13px;
+    margin-bottom: 18px;
+    line-height: 1.5;
 }
 
 .modal-btn {
     width: 100%;
-    padding: 14px;
+    padding: 13px;
     border-radius: 12px;
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 600;
     margin-bottom: 8px;
     transition: transform 0.1s;
     text-align: center;
     text-decoration: none;
     display: block;
+    letter-spacing: 0.2px;
 }
 
 .modal-btn:active {
@@ -649,12 +986,12 @@ button {
 
 .modal-close {
     position: absolute;
-    top: 12px;
-    right: 12px;
+    top: 8px;
+    right: 8px;
     width: 36px;
     height: 36px;
     border-radius: 50%;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.6);
     color: white;
     font-size: 24px;
     display: flex;
@@ -663,30 +1000,86 @@ button {
     z-index: 10;
 }
 
+/* ----- MARCO PREMIUM DE FOTO ----- */
+.photo-frame {
+    margin: 12px 4px;
+    border-radius: 14px;
+    overflow: hidden;
+    border: 5px solid var(--gun-barrel);
+    background: var(--bg-primary);
+    box-shadow: 0 0 30px rgba(110, 119, 115, 0.3), inset 0 0 0 1px rgba(0, 0, 0, 0.4);
+    transition: all 0.4s ease;
+}
+
+.photo-frame.tier-1 { border-color: var(--tier-1); box-shadow: 0 0 30px rgba(255, 46, 46, 0.45), inset 0 0 0 1px rgba(0, 0, 0, 0.4); }
+.photo-frame.tier-2 { border-color: var(--tier-2); box-shadow: 0 0 30px rgba(255, 122, 46, 0.45), inset 0 0 0 1px rgba(0, 0, 0, 0.4); }
+.photo-frame.tier-3 { border-color: var(--tier-3); box-shadow: 0 0 30px rgba(255, 62, 142, 0.45), inset 0 0 0 1px rgba(0, 0, 0, 0.4); }
+.photo-frame.tier-4 { border-color: var(--tier-4); box-shadow: 0 0 30px rgba(176, 62, 255, 0.45), inset 0 0 0 1px rgba(0, 0, 0, 0.4); }
+.photo-frame.tier-5 { border-color: var(--tier-5); box-shadow: 0 0 30px rgba(62, 142, 255, 0.5), inset 0 0 0 1px rgba(0, 0, 0, 0.4); }
+.photo-frame.tier-6 { border-color: var(--tier-6); box-shadow: 0 0 30px rgba(110, 200, 255, 0.5), inset 0 0 0 1px rgba(0, 0, 0, 0.4); }
+.photo-frame.tier-7 { border-color: var(--tier-7); box-shadow: 0 0 32px rgba(200, 234, 255, 0.55), inset 0 0 0 1px rgba(0, 0, 0, 0.4); }
+.photo-frame.tier-8 { border-color: var(--tier-8); box-shadow: 0 0 36px rgba(255, 255, 255, 0.6), inset 0 0 0 1px rgba(0, 0, 0, 0.4); }
+
 .modal-image-container {
     width: 100%;
-    margin: 16px 0;
-    border-radius: 12px;
-    overflow: hidden;
-    background-color: var(--bg-primary);
+    background-color: #000;
     display: flex;
     align-items: center;
     justify-content: center;
-    max-height: 60vh;
+    max-height: 55vh;
+    overflow: hidden;
 }
 
 .modal-image-container img {
     width: 100%;
     height: auto;
-    max-height: 60vh;
+    max-height: 55vh;
     object-fit: contain;
     display: block;
 }
 
+.photo-plate {
+    background: linear-gradient(180deg, var(--bg-secondary), var(--bg-primary));
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.plate-date {
+    font-size: 12px;
+    color: var(--text-primary);
+    font-weight: 600;
+    letter-spacing: 0.2px;
+}
+
+.plate-rank {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 12px;
+    border: 1px solid currentColor;
+    color: var(--text-muted);
+}
+
+.plate-rank.tier-1 { color: var(--tier-1); }
+.plate-rank.tier-2 { color: var(--tier-2); }
+.plate-rank.tier-3 { color: var(--tier-3); }
+.plate-rank.tier-4 { color: var(--tier-4); }
+.plate-rank.tier-5 { color: var(--tier-5); }
+.plate-rank.tier-6 { color: var(--tier-6); }
+.plate-rank.tier-7 { color: var(--tier-7); }
+.plate-rank.tier-8 { color: var(--tier-8); }
+
 .modal-actions {
     display: flex;
     gap: 8px;
-    margin-top: 8px;
+    margin-top: 12px;
+    padding: 0 4px;
 }
 
 .modal-actions .modal-btn {
@@ -694,19 +1087,69 @@ button {
     margin-bottom: 0;
 }
 
-/* =========================================
-   TOAST
-   ========================================= */
+/* ----- LEVEL UP MODAL ----- */
+.level-up-modal .modal-content {
+    text-align: center;
+    padding: 32px 24px;
+    background: linear-gradient(160deg, var(--bg-secondary), var(--bg-elevated));
+    animation: levelUpAppear 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes levelUpAppear {
+    from { transform: scale(0.5); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+.level-up-arrow {
+    font-size: 32px;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+    animation: arrowBounce 1.2s ease-in-out infinite;
+}
+
+@keyframes arrowBounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+}
+
+.level-up-label {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-weight: 700;
+    letter-spacing: 4px;
+    margin-bottom: 14px;
+}
+
+.level-up-rank {
+    font-size: 36px;
+    font-weight: 900;
+    letter-spacing: 2px;
+    margin-bottom: 24px;
+    transition: all 0.4s ease;
+    text-transform: uppercase;
+}
+
+.level-up-rank.tier-1 { color: var(--tier-1); text-shadow: 0 0 30px rgba(255, 46, 46, 0.6); }
+.level-up-rank.tier-2 { color: var(--tier-2); text-shadow: 0 0 30px rgba(255, 122, 46, 0.6); }
+.level-up-rank.tier-3 { color: var(--tier-3); text-shadow: 0 0 30px rgba(255, 62, 142, 0.6); }
+.level-up-rank.tier-4 { color: var(--tier-4); text-shadow: 0 0 30px rgba(176, 62, 255, 0.6); }
+.level-up-rank.tier-5 { color: var(--tier-5); text-shadow: 0 0 30px rgba(62, 142, 255, 0.65); }
+.level-up-rank.tier-6 { color: var(--tier-6); text-shadow: 0 0 30px rgba(110, 200, 255, 0.65); }
+.level-up-rank.tier-7 { color: var(--tier-7); text-shadow: 0 0 36px rgba(200, 234, 255, 0.7); }
+.level-up-rank.tier-8 { color: var(--tier-8); text-shadow: 0 0 40px rgba(255, 255, 255, 0.75); }
+
+/* ----- TOAST ----- */
 .toast {
     position: fixed;
     bottom: 100px;
     left: 50%;
     transform: translateX(-50%) translateY(100px);
-    background-color: var(--bg-tertiary);
+    background: linear-gradient(145deg, var(--bg-tertiary), var(--bg-elevated));
     color: var(--text-primary);
-    padding: 12px 24px;
+    padding: 12px 22px;
     border-radius: 24px;
-    font-size: 14px;
+    font-size: 13px;
+    font-weight: 500;
     z-index: 300;
     opacity: 0;
     transition: all 0.3s ease-out;
@@ -721,12 +1164,11 @@ button {
     transform: translateX(-50%) translateY(0);
 }
 
-/* =========================================
-   RESPONSIVE - tablets/desktop
-   ========================================= */
+/* ----- RESPONSIVE ----- */
 @media (min-width: 600px) {
     .stats-container,
-    .register-button {
+    .register-button,
+    .home-header {
         max-width: 500px;
         margin-left: auto;
         margin-right: auto;
@@ -734,7 +1176,7 @@ button {
 
     .gallery-grid {
         grid-template-columns: repeat(4, 1fr);
-        gap: 6px;
+        gap: 8px;
     }
 
     .calendar-container {
@@ -747,6 +1189,12 @@ button {
         max-width: 500px;
         margin: 0 auto;
         width: 100%;
+    }
+
+    .daily-quote {
+        max-width: 500px;
+        margin-left: auto;
+        margin-right: auto;
     }
 }
 
