@@ -6,7 +6,7 @@
     <meta name="theme-color" content="#0b2124">
     <title>Gym Tracker</title>
 
-    <!-- Tipografía Inter desde Google Fonts -->
+    <!-- Tipografía Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Aura del fondo (cambia según rango, solo visible en home) -->
+    <!-- Aura del fondo (cambia según rango) -->
     <div class="background-aura" id="background-aura"></div>
 
     <!-- Pantalla principal / Inicio -->
@@ -66,11 +66,22 @@
                 <span class="register-label">REGISTRAR DÍA</span>
             </button>
 
-            <!-- Frase del día (sutil, parte del fondo) -->
+            <!-- Frase del día -->
             <div class="daily-quote" id="daily-quote">
                 <p class="quote-text" id="quote-text"></p>
                 <p class="quote-author" id="quote-author"></p>
             </div>
+        </div>
+
+        <!-- Animación de día de descanso (emoji asomándose) -->
+        <div class="rest-day-overlay" id="rest-day-overlay">
+            <div class="zzz-container">
+                <span class="zzz zzz-1">Z</span>
+                <span class="zzz zzz-2">Z</span>
+                <span class="zzz zzz-3">Z</span>
+            </div>
+            <div class="rest-emoji">😴</div>
+            <div class="rest-text" id="rest-text">Hoy descansás</div>
         </div>
 
         <nav class="bottom-nav">
@@ -134,9 +145,7 @@
             </div>
         </div>
 
-        <div class="calendar-container" id="calendar-container">
-            <!-- Los meses se generan con JS -->
-        </div>
+        <div class="calendar-container" id="calendar-container"></div>
 
         <nav class="bottom-nav">
             <button class="nav-btn" data-screen="home-screen">
@@ -179,9 +188,7 @@
             <h2>Galería</h2>
         </header>
 
-        <div class="gallery-grid" id="gallery-grid">
-            <!-- Las fotos se generan con JS -->
-        </div>
+        <div class="gallery-grid" id="gallery-grid"></div>
 
         <div class="gallery-empty" id="gallery-empty">
             <p>Todavía no hay fotos.</p>
@@ -251,7 +258,7 @@
 
             <div class="settings-block info-block">
                 <p>Gym Tracker</p>
-                <p class="version">v2.0</p>
+                <p class="version">v3.0</p>
             </div>
         </div>
 
@@ -290,7 +297,7 @@
         </nav>
     </section>
 
-    <!-- Modal: Registrar día (elegir hoy o ayer) -->
+    <!-- Modal: Registrar día -->
     <div class="modal" id="register-modal">
         <div class="modal-content">
             <h3>¿Qué día querés registrar?</h3>
@@ -300,10 +307,10 @@
         </div>
     </div>
 
-    <!-- Input oculto para la cámara -->
+    <!-- Input cámara -->
     <input type="file" id="camera-input" accept="image/*" capture="environment" style="display:none">
 
-    <!-- Modal: Ver foto del día (con marco premium) -->
+    <!-- Modal: Ver foto del día (calendario) -->
     <div class="modal" id="day-modal">
         <div class="modal-content full">
             <button class="modal-close" id="day-modal-close" aria-label="Cerrar">×</button>
@@ -322,7 +329,7 @@
         </div>
     </div>
 
-    <!-- Modal: Ver foto de galería (con marco premium) -->
+    <!-- Modal: Ver foto galería (con botón borrar) -->
     <div class="modal" id="gallery-modal">
         <div class="modal-content full">
             <button class="modal-close" id="gallery-modal-close" aria-label="Cerrar">×</button>
@@ -337,7 +344,18 @@
             </div>
             <div class="modal-actions">
                 <a id="gallery-modal-download" class="modal-btn primary" download>Descargar</a>
+                <button class="modal-btn cancel" id="gallery-modal-delete">Borrar</button>
             </div>
+        </div>
+    </div>
+
+    <!-- Modal: Confirmar borrado de foto -->
+    <div class="modal" id="confirm-delete-modal">
+        <div class="modal-content">
+            <h3>¿Borrar esta foto?</h3>
+            <p class="modal-description">La foto se va a eliminar y el día va a quedar como no registrado. No se puede deshacer.</p>
+            <button class="modal-btn cancel" id="confirm-delete-yes">Sí, borrar</button>
+            <button class="modal-btn primary" id="confirm-delete-no">Cancelar</button>
         </div>
     </div>
 
@@ -351,7 +369,7 @@
         </div>
     </div>
 
-    <!-- Modal: Level Up (subiste de rango) -->
+    <!-- Modal: Level Up -->
     <div class="modal level-up-modal" id="levelup-modal">
         <div class="modal-content level-up-content">
             <div class="level-up-arrow">⬆</div>
@@ -361,7 +379,7 @@
         </div>
     </div>
 
-    <!-- Toast de notificaciones -->
+    <!-- Toast -->
     <div class="toast" id="toast"></div>
 
     <script src="script.js"></script>

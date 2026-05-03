@@ -1,10 +1,9 @@
 /* =========================================
-   GYM TRACKER v2.0 - style.css
+   GYM TRACKER v3.0 - style.css
    ========================================= */
 
-/* ----- VARIABLES Y RESET ----- */
+/* ----- VARIABLES ----- */
 :root {
-    /* Paleta principal (grises) */
     --sharp-pebbles: #dbd6d8;
     --gull-feather: #c1c2bd;
     --gun-barrel: #989f9b;
@@ -12,39 +11,35 @@
     --night-watch: #3b4f4e;
     --black-feather: #0b2124;
 
-    /* Fondos */
     --bg-primary: #0b2124;
     --bg-secondary: #142c30;
     --bg-tertiary: #1d3a3e;
     --bg-elevated: #234447;
 
-    /* Textos */
     --text-primary: #dbd6d8;
     --text-secondary: #989f9b;
     --text-muted: #6e7773;
     --text-faded: #4a5a5d;
 
-    /* Bordes */
     --border: #3b4f4e;
     --border-light: #4a5e60;
 
-    /* Estados de día */
     --day-rest: #2d4a3a;
     --day-missed: #4a2828;
     --day-future: #1a3034;
     --day-empty: #14252a;
 
-    /* Colores de tier (rangos) */
-    --tier-1: #ff2e2e;     /* Iniciante - Rojo */
-    --tier-2: #ff7a2e;     /* Constante - Naranja */
-    --tier-3: #ff3e8e;     /* Comprometido - Magenta */
-    --tier-4: #b03eff;     /* Disciplinado - Violeta */
-    --tier-5: #3e8eff;     /* Imparable - Azul */
-    --tier-6: #6ec8ff;     /* Dedicado - Azul claro */
-    --tier-7: #c8eaff;     /* Élite - Casi blanco */
-    --tier-8: #ffffff;     /* Leyenda - Blanco */
+    /* Tiers (rangos) - 9 niveles */
+    --tier-1: #ffd23e;     /* Aprendiz - Amarillo */
+    --tier-2: #ff7a2e;     /* Iniciante - Naranja */
+    --tier-3: #ff2e2e;     /* Constante - Rojo */
+    --tier-4: #ff3e8e;     /* Comprometido - Magenta */
+    --tier-5: #b03eff;     /* Disciplinado - Violeta */
+    --tier-6: #3e8eff;     /* Imparable - Azul */
+    --tier-7: #6ec8ff;     /* Dedicado - Azul claro */
+    --tier-8: #c8eaff;     /* Élite - Casi blanco */
+    --tier-9: #ffffff;     /* Leyenda - Blanco */
 
-    /* Sombras */
     --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.3);
     --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
     --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.5);
@@ -83,50 +78,27 @@ button {
     color: inherit;
 }
 
-/* ----- AURA DEL FONDO (cambia según rango) ----- */
+/* ----- AURA DEL FONDO ----- */
 .background-aura {
     position: fixed;
     inset: 0;
     z-index: -1;
     pointer-events: none;
-    background: radial-gradient(
-        ellipse 90% 60% at 50% 0%,
-        rgba(110, 119, 115, 0.25) 0%,
-        rgba(110, 119, 115, 0.10) 30%,
-        transparent 70%
-    );
+    background: radial-gradient(ellipse 90% 60% at 50% 0%, rgba(110, 119, 115, 0.25) 0%, rgba(110, 119, 115, 0.10) 30%, transparent 70%);
     transition: background 1.2s ease;
 }
 
-.background-aura.tier-1 {
-    background: radial-gradient(ellipse 90% 60% at 50% 0%, rgba(255, 46, 46, 0.28) 0%, rgba(255, 46, 46, 0.10) 30%, transparent 70%);
-}
-.background-aura.tier-2 {
-    background: radial-gradient(ellipse 90% 60% at 50% 0%, rgba(255, 122, 46, 0.28) 0%, rgba(255, 122, 46, 0.10) 30%, transparent 70%);
-}
-.background-aura.tier-3 {
-    background: radial-gradient(ellipse 90% 60% at 50% 0%, rgba(255, 62, 142, 0.28) 0%, rgba(255, 62, 142, 0.10) 30%, transparent 70%);
-}
-.background-aura.tier-4 {
-    background: radial-gradient(ellipse 90% 60% at 50% 0%, rgba(176, 62, 255, 0.28) 0%, rgba(176, 62, 255, 0.10) 30%, transparent 70%);
-}
-.background-aura.tier-5 {
-    background: radial-gradient(ellipse 90% 60% at 50% 0%, rgba(62, 142, 255, 0.30) 0%, rgba(62, 142, 255, 0.12) 30%, transparent 70%);
-}
-.background-aura.tier-6 {
-    background: radial-gradient(ellipse 90% 60% at 50% 0%, rgba(110, 200, 255, 0.30) 0%, rgba(110, 200, 255, 0.12) 30%, transparent 70%);
-}
-.background-aura.tier-7 {
-    background: radial-gradient(ellipse 90% 60% at 50% 0%, rgba(200, 234, 255, 0.32) 0%, rgba(200, 234, 255, 0.14) 30%, transparent 70%);
-}
-.background-aura.tier-8 {
-    background: radial-gradient(ellipse 90% 60% at 50% 0%, rgba(255, 255, 255, 0.30) 0%, rgba(255, 255, 255, 0.14) 30%, transparent 70%);
-}
+.background-aura.tier-1 { background: radial-gradient(ellipse 90% 60% at 50% 0%, rgba(255, 210, 62, 0.28) 0%, rgba(255, 210, 62, 0.10) 30%, transparent 70%); }
+.background-aura.tier-2 { background: radial-gradient(ellipse 90% 60% at 50% 0%, rgba(255, 122, 46, 0.28) 0%, rgba(255, 122, 46, 0.10) 30%, transparent 70%); }
+.background-aura.tier-3 { background: radial-gradient(ellipse 90% 60% at 50% 0%, rgba(255, 46, 46, 0.28) 0%, rgba(255, 46, 46, 0.10) 30%, transparent 70%); }
+.background-aura.tier-4 { background: radial-gradient(ellipse 90% 60% at 50% 0%, rgba(255, 62, 142, 0.28) 0%, rgba(255, 62, 142, 0.10) 30%, transparent 70%); }
+.background-aura.tier-5 { background: radial-gradient(ellipse 90% 60% at 50% 0%, rgba(176, 62, 255, 0.28) 0%, rgba(176, 62, 255, 0.10) 30%, transparent 70%); }
+.background-aura.tier-6 { background: radial-gradient(ellipse 90% 60% at 50% 0%, rgba(62, 142, 255, 0.30) 0%, rgba(62, 142, 255, 0.12) 30%, transparent 70%); }
+.background-aura.tier-7 { background: radial-gradient(ellipse 90% 60% at 50% 0%, rgba(110, 200, 255, 0.30) 0%, rgba(110, 200, 255, 0.12) 30%, transparent 70%); }
+.background-aura.tier-8 { background: radial-gradient(ellipse 90% 60% at 50% 0%, rgba(200, 234, 255, 0.32) 0%, rgba(200, 234, 255, 0.14) 30%, transparent 70%); }
+.background-aura.tier-9 { background: radial-gradient(ellipse 90% 60% at 50% 0%, rgba(255, 255, 255, 0.30) 0%, rgba(255, 255, 255, 0.14) 30%, transparent 70%); }
 
-/* Cuando NO estamos en home, el aura se oculta */
-.background-aura.hidden {
-    opacity: 0;
-}
+.background-aura.hidden { opacity: 0; }
 
 /* ----- PANTALLAS ----- */
 .screen {
@@ -138,18 +110,10 @@ button {
     padding-bottom: 70px;
 }
 
-.screen.active {
-    display: flex;
-}
+.screen.active { display: flex; }
 
-/* Animaciones de entrada de pantalla (slide horizontal) */
-.screen.slide-in-right {
-    animation: slideInRight 0.28s ease-out;
-}
-
-.screen.slide-in-left {
-    animation: slideInLeft 0.28s ease-out;
-}
+.screen.slide-in-right { animation: slideInRight 0.28s ease-out; }
+.screen.slide-in-left { animation: slideInLeft 0.28s ease-out; }
 
 @keyframes slideInRight {
     from { transform: translateX(100%); opacity: 0.5; }
@@ -283,15 +247,15 @@ button {
     letter-spacing: -3px;
 }
 
-/* Glow del número según tier */
-.streak-value.tier-1 { color: var(--tier-1); text-shadow: 0 0 24px rgba(255, 46, 46, 0.5); }
+.streak-value.tier-1 { color: var(--tier-1); text-shadow: 0 0 24px rgba(255, 210, 62, 0.5); }
 .streak-value.tier-2 { color: var(--tier-2); text-shadow: 0 0 24px rgba(255, 122, 46, 0.5); }
-.streak-value.tier-3 { color: var(--tier-3); text-shadow: 0 0 24px rgba(255, 62, 142, 0.5); }
-.streak-value.tier-4 { color: var(--tier-4); text-shadow: 0 0 24px rgba(176, 62, 255, 0.5); }
-.streak-value.tier-5 { color: var(--tier-5); text-shadow: 0 0 24px rgba(62, 142, 255, 0.55); }
-.streak-value.tier-6 { color: var(--tier-6); text-shadow: 0 0 24px rgba(110, 200, 255, 0.55); }
-.streak-value.tier-7 { color: var(--tier-7); text-shadow: 0 0 28px rgba(200, 234, 255, 0.6); }
-.streak-value.tier-8 { color: var(--tier-8); text-shadow: 0 0 32px rgba(255, 255, 255, 0.65); }
+.streak-value.tier-3 { color: var(--tier-3); text-shadow: 0 0 24px rgba(255, 46, 46, 0.5); }
+.streak-value.tier-4 { color: var(--tier-4); text-shadow: 0 0 24px rgba(255, 62, 142, 0.5); }
+.streak-value.tier-5 { color: var(--tier-5); text-shadow: 0 0 24px rgba(176, 62, 255, 0.5); }
+.streak-value.tier-6 { color: var(--tier-6); text-shadow: 0 0 24px rgba(62, 142, 255, 0.55); }
+.streak-value.tier-7 { color: var(--tier-7); text-shadow: 0 0 24px rgba(110, 200, 255, 0.55); }
+.streak-value.tier-8 { color: var(--tier-8); text-shadow: 0 0 28px rgba(200, 234, 255, 0.6); }
+.streak-value.tier-9 { color: var(--tier-9); text-shadow: 0 0 32px rgba(255, 255, 255, 0.65); }
 
 .stat-card.small .stat-value {
     font-size: 32px;
@@ -315,7 +279,6 @@ button {
     padding: 18px;
 }
 
-/* Rank badge (nombre del rango) */
 .rank-badge {
     margin-top: 14px;
     padding: 6px 16px;
@@ -335,16 +298,17 @@ button {
     transform: scale(1);
 }
 
-.rank-badge.tier-1 { color: var(--tier-1); box-shadow: 0 0 16px rgba(255, 46, 46, 0.25); }
+.rank-badge.tier-1 { color: var(--tier-1); box-shadow: 0 0 16px rgba(255, 210, 62, 0.25); }
 .rank-badge.tier-2 { color: var(--tier-2); box-shadow: 0 0 16px rgba(255, 122, 46, 0.25); }
-.rank-badge.tier-3 { color: var(--tier-3); box-shadow: 0 0 16px rgba(255, 62, 142, 0.25); }
-.rank-badge.tier-4 { color: var(--tier-4); box-shadow: 0 0 16px rgba(176, 62, 255, 0.25); }
-.rank-badge.tier-5 { color: var(--tier-5); box-shadow: 0 0 16px rgba(62, 142, 255, 0.3); }
-.rank-badge.tier-6 { color: var(--tier-6); box-shadow: 0 0 16px rgba(110, 200, 255, 0.3); }
-.rank-badge.tier-7 { color: var(--tier-7); box-shadow: 0 0 18px rgba(200, 234, 255, 0.35); }
-.rank-badge.tier-8 { color: var(--tier-8); box-shadow: 0 0 22px rgba(255, 255, 255, 0.4); }
+.rank-badge.tier-3 { color: var(--tier-3); box-shadow: 0 0 16px rgba(255, 46, 46, 0.25); }
+.rank-badge.tier-4 { color: var(--tier-4); box-shadow: 0 0 16px rgba(255, 62, 142, 0.25); }
+.rank-badge.tier-5 { color: var(--tier-5); box-shadow: 0 0 16px rgba(176, 62, 255, 0.25); }
+.rank-badge.tier-6 { color: var(--tier-6); box-shadow: 0 0 16px rgba(62, 142, 255, 0.3); }
+.rank-badge.tier-7 { color: var(--tier-7); box-shadow: 0 0 16px rgba(110, 200, 255, 0.3); }
+.rank-badge.tier-8 { color: var(--tier-8); box-shadow: 0 0 18px rgba(200, 234, 255, 0.35); }
+.rank-badge.tier-9 { color: var(--tier-9); box-shadow: 0 0 22px rgba(255, 255, 255, 0.4); }
 
-/* ----- BOTÓN REGISTRAR (con doble pulso) ----- */
+/* ----- BOTÓN REGISTRAR ----- */
 .register-button {
     margin: 16px 20px 0;
     padding: 18px;
@@ -373,7 +337,6 @@ button {
 .register-button.disabled {
     animation: none;
     opacity: 0.6;
-    pointer-events: none;
 }
 
 @keyframes registerPulse {
@@ -387,26 +350,16 @@ button {
     }
 }
 
-.register-icon {
-    font-size: 22px;
-    font-weight: 300;
-}
+.register-icon { font-size: 22px; font-weight: 300; }
+.register-label { font-weight: 700; }
 
-.register-label {
-    font-weight: 700;
-}
-
-/* ----- FRASE DEL DÍA (sutil) ----- */
+/* ----- FRASE DEL DÍA ----- */
 .daily-quote {
     margin-top: auto;
     padding: 32px 28px 16px;
     text-align: center;
     opacity: 0.35;
     transition: opacity 0.5s ease;
-}
-
-.daily-quote:hover {
-    opacity: 0.6;
 }
 
 .quote-text {
@@ -424,6 +377,106 @@ button {
     font-weight: 600;
     letter-spacing: 0.5px;
     text-transform: uppercase;
+}
+
+/* ----- DÍA DE DESCANSO (overlay con emoji) ----- */
+.rest-day-overlay {
+    position: fixed;
+    bottom: 70px;
+    left: 0;
+    right: 0;
+    height: 0;
+    pointer-events: none;
+    z-index: 50;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    transition: height 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.rest-day-overlay.visible {
+    height: 130px;
+    pointer-events: auto;
+}
+
+/* Emoji asomándose */
+.rest-emoji {
+    font-size: 110px;
+    line-height: 1;
+    transform: translateY(50%);
+    filter: drop-shadow(0 -8px 20px rgba(0, 0, 0, 0.5));
+    animation: emojiBob 3s ease-in-out infinite;
+}
+
+@keyframes emojiBob {
+    0%, 100% { transform: translateY(50%); }
+    50% { transform: translateY(46%); }
+}
+
+/* Texto */
+.rest-text {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    background: var(--bg-primary);
+    padding: 6px 14px;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    white-space: nowrap;
+    box-shadow: var(--shadow-sm);
+}
+
+/* Z's flotando como humo */
+.zzz-container {
+    position: absolute;
+    top: 30px;
+    right: 30%;
+    width: 60px;
+    height: 80px;
+    pointer-events: none;
+}
+
+.zzz {
+    position: absolute;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text-secondary);
+    opacity: 0;
+    font-family: 'Inter', sans-serif;
+    animation: zzzFloat 3s ease-in-out infinite;
+}
+
+.zzz-1 {
+    left: 0;
+    animation-delay: 0s;
+    font-size: 18px;
+}
+
+.zzz-2 {
+    left: 18px;
+    animation-delay: 1s;
+    font-size: 22px;
+}
+
+.zzz-3 {
+    left: 36px;
+    animation-delay: 2s;
+    font-size: 26px;
+}
+
+@keyframes zzzFloat {
+    0% { transform: translateY(60px) scale(0.6); opacity: 0; }
+    20% { opacity: 0.7; }
+    50% { transform: translateY(20px) scale(1) rotate(8deg); opacity: 0.9; }
+    80% { opacity: 0.4; }
+    100% { transform: translateY(-30px) scale(1.2) rotate(-5deg); opacity: 0; }
 }
 
 /* ----- HEADER GENERAL ----- */
@@ -476,7 +529,7 @@ button {
     font-feature-settings: 'tnum';
 }
 
-/* ----- NAVEGACIÓN INFERIOR ----- */
+/* ----- NAV INFERIOR ----- */
 .bottom-nav {
     position: fixed;
     bottom: 0;
@@ -544,17 +597,9 @@ button {
     display: inline-block;
 }
 
-.legend-dot.registered {
-    background: linear-gradient(135deg, #ff2e2e, #ff7a2e);
-}
-
-.legend-dot.rest {
-    background-color: var(--day-rest);
-}
-
-.legend-dot.missed {
-    background-color: var(--day-missed);
-}
+.legend-dot.registered { background: linear-gradient(135deg, #ffd23e, #ff7a2e); }
+.legend-dot.rest { background-color: var(--day-rest); }
+.legend-dot.missed { background-color: var(--day-missed); }
 
 .calendar-container {
     flex: 1;
@@ -563,9 +608,7 @@ button {
     -webkit-overflow-scrolling: touch;
 }
 
-.month-block {
-    margin-bottom: 28px;
-}
+.month-block { margin-bottom: 28px; }
 
 .month-title {
     font-size: 17px;
@@ -614,21 +657,14 @@ button {
     font-weight: 500;
 }
 
-.day.empty {
-    background: transparent;
-    pointer-events: none;
-}
+.day.empty { background: transparent; pointer-events: none; }
 
 .day.future {
     background-color: var(--day-future);
     color: var(--text-faded);
 }
 
-/* Día de hoy con anillo pulsante */
-.day.today {
-    font-weight: 700;
-    z-index: 2;
-}
+.day.today { font-weight: 700; z-index: 2; }
 
 .day.today::after {
     content: '';
@@ -640,7 +676,6 @@ button {
     pointer-events: none;
 }
 
-/* Cuando hoy está registrado, el anillo toma el color del tier */
 .day.today.registered.tier-1::after { border-color: var(--tier-1); animation-name: todayPulseColor1; }
 .day.today.registered.tier-2::after { border-color: var(--tier-2); animation-name: todayPulseColor2; }
 .day.today.registered.tier-3::after { border-color: var(--tier-3); animation-name: todayPulseColor3; }
@@ -649,6 +684,7 @@ button {
 .day.today.registered.tier-6::after { border-color: var(--tier-6); animation-name: todayPulseColor6; }
 .day.today.registered.tier-7::after { border-color: var(--tier-7); animation-name: todayPulseColor7; }
 .day.today.registered.tier-8::after { border-color: var(--tier-8); animation-name: todayPulseColor8; }
+.day.today.registered.tier-9::after { border-color: var(--tier-9); animation-name: todayPulseColor9; }
 
 @keyframes todayPulse {
     0%, 100% { box-shadow: 0 0 0 0 rgba(219, 214, 216, 0.5); transform: scale(1); }
@@ -656,47 +692,44 @@ button {
 }
 
 @keyframes todayPulseColor1 {
-    0%, 100% { box-shadow: 0 0 0 0 rgba(255, 46, 46, 0.6); transform: scale(1); }
-    50% { box-shadow: 0 0 0 6px rgba(255, 46, 46, 0); transform: scale(1.05); }
+    0%, 100% { box-shadow: 0 0 0 0 rgba(255, 210, 62, 0.6); transform: scale(1); }
+    50% { box-shadow: 0 0 0 6px rgba(255, 210, 62, 0); transform: scale(1.05); }
 }
 @keyframes todayPulseColor2 {
     0%, 100% { box-shadow: 0 0 0 0 rgba(255, 122, 46, 0.6); transform: scale(1); }
     50% { box-shadow: 0 0 0 6px rgba(255, 122, 46, 0); transform: scale(1.05); }
 }
 @keyframes todayPulseColor3 {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(255, 46, 46, 0.6); transform: scale(1); }
+    50% { box-shadow: 0 0 0 6px rgba(255, 46, 46, 0); transform: scale(1.05); }
+}
+@keyframes todayPulseColor4 {
     0%, 100% { box-shadow: 0 0 0 0 rgba(255, 62, 142, 0.6); transform: scale(1); }
     50% { box-shadow: 0 0 0 6px rgba(255, 62, 142, 0); transform: scale(1.05); }
 }
-@keyframes todayPulseColor4 {
+@keyframes todayPulseColor5 {
     0%, 100% { box-shadow: 0 0 0 0 rgba(176, 62, 255, 0.6); transform: scale(1); }
     50% { box-shadow: 0 0 0 6px rgba(176, 62, 255, 0); transform: scale(1.05); }
 }
-@keyframes todayPulseColor5 {
+@keyframes todayPulseColor6 {
     0%, 100% { box-shadow: 0 0 0 0 rgba(62, 142, 255, 0.6); transform: scale(1); }
     50% { box-shadow: 0 0 0 6px rgba(62, 142, 255, 0); transform: scale(1.05); }
 }
-@keyframes todayPulseColor6 {
+@keyframes todayPulseColor7 {
     0%, 100% { box-shadow: 0 0 0 0 rgba(110, 200, 255, 0.6); transform: scale(1); }
     50% { box-shadow: 0 0 0 6px rgba(110, 200, 255, 0); transform: scale(1.05); }
 }
-@keyframes todayPulseColor7 {
+@keyframes todayPulseColor8 {
     0%, 100% { box-shadow: 0 0 0 0 rgba(200, 234, 255, 0.7); transform: scale(1); }
     50% { box-shadow: 0 0 0 6px rgba(200, 234, 255, 0); transform: scale(1.05); }
 }
-@keyframes todayPulseColor8 {
+@keyframes todayPulseColor9 {
     0%, 100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7); transform: scale(1); }
     50% { box-shadow: 0 0 0 6px rgba(255, 255, 255, 0); transform: scale(1.05); }
 }
 
-.day.rest {
-    background-color: var(--day-rest);
-    color: var(--sharp-pebbles);
-}
-
-.day.missed {
-    background-color: var(--day-missed);
-    color: var(--sharp-pebbles);
-}
+.day.rest { background-color: var(--day-rest); color: var(--sharp-pebbles); }
+.day.missed { background-color: var(--day-missed); color: var(--sharp-pebbles); }
 
 .day.registered {
     color: #ffffff;
@@ -708,15 +741,15 @@ button {
     transform: scale(0.92);
 }
 
-/* Niveles de racha (cada 10 días) */
-.day.tier-1 { background: linear-gradient(135deg, #ff1e1e, #ff5e2e); }
-.day.tier-2 { background: linear-gradient(135deg, #ff7a2e, #ff3e8e); }
-.day.tier-3 { background: linear-gradient(135deg, #ff3e8e, #c83eff); }
-.day.tier-4 { background: linear-gradient(135deg, #b03eff, #6e3eff); }
-.day.tier-5 { background: linear-gradient(135deg, #3e8eff, #6ec8ff); }
-.day.tier-6 { background: linear-gradient(135deg, #6ec8ff, #c8eaff); color: #0b2124; }
-.day.tier-7 { background: linear-gradient(135deg, #c8eaff, #ffffff); color: #0b2124; }
-.day.tier-8 {
+.day.tier-1 { background: linear-gradient(135deg, #ffd23e, #ffaa1e); color: #0b2124; }
+.day.tier-2 { background: linear-gradient(135deg, #ff7a2e, #ff5a1e); }
+.day.tier-3 { background: linear-gradient(135deg, #ff1e1e, #ff3e8e); }
+.day.tier-4 { background: linear-gradient(135deg, #ff3e8e, #c83eff); }
+.day.tier-5 { background: linear-gradient(135deg, #b03eff, #6e3eff); }
+.day.tier-6 { background: linear-gradient(135deg, #3e8eff, #6ec8ff); }
+.day.tier-7 { background: linear-gradient(135deg, #6ec8ff, #c8eaff); color: #0b2124; }
+.day.tier-8 { background: linear-gradient(135deg, #c8eaff, #ffffff); color: #0b2124; }
+.day.tier-9 {
     background: linear-gradient(135deg, #ffffff, #f0f8ff);
     color: #0b2124;
     box-shadow: 0 0 14px rgba(255, 255, 255, 0.5);
@@ -745,19 +778,17 @@ button {
     border: 3px solid var(--border);
 }
 
-.gallery-item:active {
-    transform: scale(0.94);
-}
+.gallery-item:active { transform: scale(0.94); }
 
-/* Marcos de la galería según tier */
-.gallery-item.tier-1 { border-color: var(--tier-1); box-shadow: 0 0 12px rgba(255, 46, 46, 0.3); }
+.gallery-item.tier-1 { border-color: var(--tier-1); box-shadow: 0 0 12px rgba(255, 210, 62, 0.3); }
 .gallery-item.tier-2 { border-color: var(--tier-2); box-shadow: 0 0 12px rgba(255, 122, 46, 0.3); }
-.gallery-item.tier-3 { border-color: var(--tier-3); box-shadow: 0 0 12px rgba(255, 62, 142, 0.3); }
-.gallery-item.tier-4 { border-color: var(--tier-4); box-shadow: 0 0 12px rgba(176, 62, 255, 0.3); }
-.gallery-item.tier-5 { border-color: var(--tier-5); box-shadow: 0 0 12px rgba(62, 142, 255, 0.35); }
-.gallery-item.tier-6 { border-color: var(--tier-6); box-shadow: 0 0 12px rgba(110, 200, 255, 0.35); }
-.gallery-item.tier-7 { border-color: var(--tier-7); box-shadow: 0 0 14px rgba(200, 234, 255, 0.4); }
-.gallery-item.tier-8 { border-color: var(--tier-8); box-shadow: 0 0 18px rgba(255, 255, 255, 0.45); }
+.gallery-item.tier-3 { border-color: var(--tier-3); box-shadow: 0 0 12px rgba(255, 46, 46, 0.3); }
+.gallery-item.tier-4 { border-color: var(--tier-4); box-shadow: 0 0 12px rgba(255, 62, 142, 0.3); }
+.gallery-item.tier-5 { border-color: var(--tier-5); box-shadow: 0 0 12px rgba(176, 62, 255, 0.3); }
+.gallery-item.tier-6 { border-color: var(--tier-6); box-shadow: 0 0 12px rgba(62, 142, 255, 0.35); }
+.gallery-item.tier-7 { border-color: var(--tier-7); box-shadow: 0 0 12px rgba(110, 200, 255, 0.35); }
+.gallery-item.tier-8 { border-color: var(--tier-8); box-shadow: 0 0 14px rgba(200, 234, 255, 0.4); }
+.gallery-item.tier-9 { border-color: var(--tier-9); box-shadow: 0 0 18px rgba(255, 255, 255, 0.45); }
 
 .gallery-item img {
     width: 100%;
@@ -790,9 +821,7 @@ button {
     color: var(--text-secondary);
 }
 
-.gallery-empty.visible {
-    display: flex;
-}
+.gallery-empty.visible { display: flex; }
 
 .gallery-empty p {
     font-size: 16px;
@@ -881,9 +910,7 @@ button {
     color: var(--text-muted);
 }
 
-.info-block p {
-    font-size: 12px;
-}
+.info-block p { font-size: 12px; }
 
 .info-block .version {
     font-size: 10px;
@@ -905,9 +932,7 @@ button {
     backdrop-filter: blur(4px);
 }
 
-.modal.active {
-    display: flex;
-}
+.modal.active { display: flex; }
 
 @keyframes fadeIn {
     from { opacity: 0; }
@@ -969,9 +994,7 @@ button {
     letter-spacing: 0.2px;
 }
 
-.modal-btn:active {
-    transform: scale(0.98);
-}
+.modal-btn:active { transform: scale(0.98); }
 
 .modal-btn.primary {
     background: linear-gradient(135deg, var(--night-watch), var(--arctic-lichen));
@@ -1011,14 +1034,15 @@ button {
     transition: all 0.4s ease;
 }
 
-.photo-frame.tier-1 { border-color: var(--tier-1); box-shadow: 0 0 30px rgba(255, 46, 46, 0.45), inset 0 0 0 1px rgba(0, 0, 0, 0.4); }
+.photo-frame.tier-1 { border-color: var(--tier-1); box-shadow: 0 0 30px rgba(255, 210, 62, 0.45), inset 0 0 0 1px rgba(0, 0, 0, 0.4); }
 .photo-frame.tier-2 { border-color: var(--tier-2); box-shadow: 0 0 30px rgba(255, 122, 46, 0.45), inset 0 0 0 1px rgba(0, 0, 0, 0.4); }
-.photo-frame.tier-3 { border-color: var(--tier-3); box-shadow: 0 0 30px rgba(255, 62, 142, 0.45), inset 0 0 0 1px rgba(0, 0, 0, 0.4); }
-.photo-frame.tier-4 { border-color: var(--tier-4); box-shadow: 0 0 30px rgba(176, 62, 255, 0.45), inset 0 0 0 1px rgba(0, 0, 0, 0.4); }
-.photo-frame.tier-5 { border-color: var(--tier-5); box-shadow: 0 0 30px rgba(62, 142, 255, 0.5), inset 0 0 0 1px rgba(0, 0, 0, 0.4); }
-.photo-frame.tier-6 { border-color: var(--tier-6); box-shadow: 0 0 30px rgba(110, 200, 255, 0.5), inset 0 0 0 1px rgba(0, 0, 0, 0.4); }
-.photo-frame.tier-7 { border-color: var(--tier-7); box-shadow: 0 0 32px rgba(200, 234, 255, 0.55), inset 0 0 0 1px rgba(0, 0, 0, 0.4); }
-.photo-frame.tier-8 { border-color: var(--tier-8); box-shadow: 0 0 36px rgba(255, 255, 255, 0.6), inset 0 0 0 1px rgba(0, 0, 0, 0.4); }
+.photo-frame.tier-3 { border-color: var(--tier-3); box-shadow: 0 0 30px rgba(255, 46, 46, 0.45), inset 0 0 0 1px rgba(0, 0, 0, 0.4); }
+.photo-frame.tier-4 { border-color: var(--tier-4); box-shadow: 0 0 30px rgba(255, 62, 142, 0.45), inset 0 0 0 1px rgba(0, 0, 0, 0.4); }
+.photo-frame.tier-5 { border-color: var(--tier-5); box-shadow: 0 0 30px rgba(176, 62, 255, 0.45), inset 0 0 0 1px rgba(0, 0, 0, 0.4); }
+.photo-frame.tier-6 { border-color: var(--tier-6); box-shadow: 0 0 30px rgba(62, 142, 255, 0.5), inset 0 0 0 1px rgba(0, 0, 0, 0.4); }
+.photo-frame.tier-7 { border-color: var(--tier-7); box-shadow: 0 0 30px rgba(110, 200, 255, 0.5), inset 0 0 0 1px rgba(0, 0, 0, 0.4); }
+.photo-frame.tier-8 { border-color: var(--tier-8); box-shadow: 0 0 32px rgba(200, 234, 255, 0.55), inset 0 0 0 1px rgba(0, 0, 0, 0.4); }
+.photo-frame.tier-9 { border-color: var(--tier-9); box-shadow: 0 0 36px rgba(255, 255, 255, 0.6), inset 0 0 0 1px rgba(0, 0, 0, 0.4); }
 
 .modal-image-container {
     width: 100%;
@@ -1074,6 +1098,7 @@ button {
 .plate-rank.tier-6 { color: var(--tier-6); }
 .plate-rank.tier-7 { color: var(--tier-7); }
 .plate-rank.tier-8 { color: var(--tier-8); }
+.plate-rank.tier-9 { color: var(--tier-9); }
 
 .modal-actions {
     display: flex;
@@ -1087,7 +1112,7 @@ button {
     margin-bottom: 0;
 }
 
-/* ----- LEVEL UP MODAL ----- */
+/* ----- LEVEL UP ----- */
 .level-up-modal .modal-content {
     text-align: center;
     padding: 32px 24px;
@@ -1129,14 +1154,15 @@ button {
     text-transform: uppercase;
 }
 
-.level-up-rank.tier-1 { color: var(--tier-1); text-shadow: 0 0 30px rgba(255, 46, 46, 0.6); }
+.level-up-rank.tier-1 { color: var(--tier-1); text-shadow: 0 0 30px rgba(255, 210, 62, 0.6); }
 .level-up-rank.tier-2 { color: var(--tier-2); text-shadow: 0 0 30px rgba(255, 122, 46, 0.6); }
-.level-up-rank.tier-3 { color: var(--tier-3); text-shadow: 0 0 30px rgba(255, 62, 142, 0.6); }
-.level-up-rank.tier-4 { color: var(--tier-4); text-shadow: 0 0 30px rgba(176, 62, 255, 0.6); }
-.level-up-rank.tier-5 { color: var(--tier-5); text-shadow: 0 0 30px rgba(62, 142, 255, 0.65); }
-.level-up-rank.tier-6 { color: var(--tier-6); text-shadow: 0 0 30px rgba(110, 200, 255, 0.65); }
-.level-up-rank.tier-7 { color: var(--tier-7); text-shadow: 0 0 36px rgba(200, 234, 255, 0.7); }
-.level-up-rank.tier-8 { color: var(--tier-8); text-shadow: 0 0 40px rgba(255, 255, 255, 0.75); }
+.level-up-rank.tier-3 { color: var(--tier-3); text-shadow: 0 0 30px rgba(255, 46, 46, 0.6); }
+.level-up-rank.tier-4 { color: var(--tier-4); text-shadow: 0 0 30px rgba(255, 62, 142, 0.6); }
+.level-up-rank.tier-5 { color: var(--tier-5); text-shadow: 0 0 30px rgba(176, 62, 255, 0.6); }
+.level-up-rank.tier-6 { color: var(--tier-6); text-shadow: 0 0 30px rgba(62, 142, 255, 0.65); }
+.level-up-rank.tier-7 { color: var(--tier-7); text-shadow: 0 0 30px rgba(110, 200, 255, 0.65); }
+.level-up-rank.tier-8 { color: var(--tier-8); text-shadow: 0 0 36px rgba(200, 234, 255, 0.7); }
+.level-up-rank.tier-9 { color: var(--tier-9); text-shadow: 0 0 40px rgba(255, 255, 255, 0.75); }
 
 /* ----- TOAST ----- */
 .toast {

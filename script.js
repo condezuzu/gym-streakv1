@@ -1,5 +1,5 @@
 /* =========================================
-   GYM TRACKER v2.0 - script.js
+   GYM TRACKER v3.0 - script.js
    ========================================= */
 
 // ---------- CONSTANTES ----------
@@ -8,7 +8,7 @@ const DEFAULT_DATA = {
     records: {},
     restDays: [],
     startDate: null,
-    lastKnownTier: 0, // Para detectar cuando subís de rango
+    lastKnownTier: 0,
 };
 
 const MONTHS = [
@@ -19,23 +19,32 @@ const MONTHS = [
 const WEEKDAYS = ['L', 'M', 'M', 'J', 'V', 'S', 'D'];
 const WEEKDAYS_FULL = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
 
-// Nombres de los rangos
+// Rangos (9 niveles ahora)
 const RANK_NAMES = [
     null,           // tier 0 - sin rango
-    'Iniciante',    // tier 1 (días 1-10)
-    'Constante',    // tier 2 (días 11-20)
-    'Comprometido', // tier 3 (días 21-30)
-    'Disciplinado', // tier 4 (días 31-40)
-    'Imparable',    // tier 5 (días 41-50)
-    'Dedicado',     // tier 6 (días 51-60)
-    'Élite',        // tier 7 (días 61-70)
-    'Leyenda',      // tier 8 (días 71+)
+    'Aprendiz',     // tier 1 (días 1-10)   - amarillo
+    'Iniciante',    // tier 2 (días 11-20)  - naranja
+    'Constante',    // tier 3 (días 21-30)  - rojo
+    'Comprometido', // tier 4 (días 31-40)  - magenta
+    'Disciplinado', // tier 5 (días 41-50)  - violeta
+    'Imparable',    // tier 6 (días 51-60)  - azul
+    'Dedicado',     // tier 7 (días 61-70)  - azul claro
+    'Élite',        // tier 8 (días 71-80)  - casi blanco
+    'Leyenda',      // tier 9 (días 81+)    - blanco
 ];
 
-// Orden de las pantallas (para decidir dirección del slide)
 const SCREEN_ORDER = ['home-screen', 'calendar-screen', 'gallery-screen', 'settings-screen'];
 
-// Frases del día
+// Frases motivadoras de día de descanso
+const REST_MESSAGES = [
+    'Hoy descansás',
+    'Recuperá fuerzas',
+    'Día libre',
+    'Shhh... descansando',
+    'Recargando energía',
+];
+
+// Frases del día (de famosos)
 const QUOTES = [
     { text: "La última repetición es la que cuenta.", author: "Arnold Schwarzenegger" },
     { text: "El dolor que sentís hoy es la fuerza que vas a sentir mañana.", author: "Arnold Schwarzenegger" },
@@ -64,7 +73,9 @@ const QUOTES = [
 let appData = loadData();
 let currentYear = new Date().getFullYear();
 let pendingDate = null;
-let isRegistering = false; // Para evitar múltiples registros simultáneos
+let isRegistering = false;
+let pendingDeleteKey = null; // Clave del día pendiente de borrar (para confirmación)
+let pendingDeleteSource = null; // 'gallery' o 'day' (de dónde vino el borrado)
 
 // ---------- UTILIDADES DE FECHA ----------
 function dateToKey(date) {
@@ -106,11 +117,21 @@ function daysBetween(d1, d2) {
     return Math.round((d2 - d1) / ms);
 }
 
-// Día del año (1-366), para elegir la frase del día
 function dayOfYear(date) {
     const start = new Date(date.getFullYear(), 0, 0);
     const diff = date - start;
     return Math.floor(diff / (1000 * 60 * 60 * 24));
+}
+
+function isTodayRestDay() {
+    const today = new Date();
+    return appData.restDays.includes(today.getDay());
+}
+
+function isYesterdayRestDay() {
+    const d = new Date();
+    d.setDate(d.getDate() - 1);
+    return appData.restDays.includes(d.getDay());
 }
 
 // ---------- ALMACENAMIENTO ----------
@@ -236,7 +257,7 @@ function getStreakNumberAtDay(dateKey) {
     return streak;
 }
 
-// Devuelve el número de tier (1-8) según la racha
+// Tier según racha (ahora 9 niveles)
 function getTier(streakNumber) {
     if (streakNumber <= 0) return 0;
     if (streakNumber <= 10) return 1;
@@ -246,25 +267,18 @@ function getTier(streakNumber) {
     if (streakNumber <= 50) return 5;
     if (streakNumber <= 60) return 6;
     if (streakNumber <= 70) return 7;
-    return 8;
-}
-
-function getTierClass(streakNumber) {
-    const tier = getTier(streakNumber);
-    return tier === 0 ? '' : `tier-${tier}`;
+    if (streakNumber <= 80) return 8;
+    return 9;
 }
 
 function getRankName(streakNumber) {
-    const tier = getTier(streakNumber);
-    return RANK_NAMES[tier];
+    return RANK_NAMES[getTier(streakNumber)];
 }
 
 // ---------- MENSAJE DE ESTADO ----------
 function getStatusMessage() {
     const streak = calculateCurrentStreak();
-    const today = new Date();
-    const dayOfWeek = today.getDay();
-    const isRestDay = appData.restDays.includes(dayOfWeek);
+    const isRestDay = isTodayRestDay();
     const todayRegistered = !!appData.records[todayKey()];
     const totalDays = Object.keys(appData.records).length;
 
@@ -287,7 +301,7 @@ function getStatusMessage() {
     return '¿Ya fuiste hoy?';
 }
 
-// ---------- SALUDO DINÁMICO ----------
+// ---------- SALUDO ----------
 function getGreeting() {
     const hour = new Date().getHours();
     if (hour >= 5 && hour < 12) return 'Buenos días';
@@ -305,7 +319,6 @@ function animateGreeting() {
     greetingEl.classList.remove('fade-out');
     statusEl.style.opacity = '0';
 
-    // Después de 1 segundo, el saludo se desvanece y aparece el estado
     setTimeout(() => {
         greetingEl.classList.add('fade-out');
         statusEl.style.opacity = '1';
@@ -323,7 +336,22 @@ function showDailyQuote() {
     document.getElementById('quote-author').textContent = `— ${quote.author}`;
 }
 
-// ---------- ACTUALIZACIÓN DE UI ----------
+// ---------- DÍA DE DESCANSO (overlay) ----------
+function updateRestDayOverlay() {
+    const overlay = document.getElementById('rest-day-overlay');
+    const homeActive = document.getElementById('home-screen').classList.contains('active');
+
+    if (isTodayRestDay() && homeActive) {
+        // Mostrar overlay con frase aleatoria
+        const restText = REST_MESSAGES[Math.floor(Math.random() * REST_MESSAGES.length)];
+        document.getElementById('rest-text').textContent = restText;
+        overlay.classList.add('visible');
+    } else {
+        overlay.classList.remove('visible');
+    }
+}
+
+// ---------- ACTUALIZAR UI ----------
 function updateStats() {
     const current = calculateCurrentStreak();
     const max = calculateMaxStreak();
@@ -332,17 +360,12 @@ function updateStats() {
 
     const streakEl = document.getElementById('current-streak');
     streakEl.textContent = current;
-
-    // Quitar tier classes anteriores
     streakEl.className = 'stat-value streak-value';
-    if (tier > 0) {
-        streakEl.classList.add(`tier-${tier}`);
-    }
+    if (tier > 0) streakEl.classList.add(`tier-${tier}`);
 
     document.getElementById('max-streak').textContent = max;
     document.getElementById('total-days').textContent = total;
 
-    // Rank badge
     const rankBadge = document.getElementById('rank-badge');
     rankBadge.className = 'rank-badge';
     if (tier > 0) {
@@ -352,41 +375,36 @@ function updateStats() {
         rankBadge.textContent = '';
     }
 
-    // Aura del fondo (solo si estamos en home)
     updateBackgroundAura(tier);
 
-    // Mensaje de estado
     const statusEl = document.getElementById('status-message');
-    if (statusEl) {
-        statusEl.textContent = getStatusMessage();
-    }
+    if (statusEl) statusEl.textContent = getStatusMessage();
 
-    // Botón de registrar (deshabilitar si ya registró hoy y ayer)
     updateRegisterButton();
+    updateRestDayOverlay();
 }
 
 function updateBackgroundAura(tier) {
     const aura = document.getElementById('background-aura');
     aura.className = 'background-aura';
 
-    // Solo aplicar tier si estamos en home
     const homeActive = document.getElementById('home-screen').classList.contains('active');
     if (!homeActive) {
         aura.classList.add('hidden');
         return;
     }
 
-    if (tier > 0) {
-        aura.classList.add(`tier-${tier}`);
-    }
+    if (tier > 0) aura.classList.add(`tier-${tier}`);
 }
 
 function updateRegisterButton() {
     const btn = document.getElementById('register-btn');
     const todayRegistered = !!appData.records[todayKey()];
     const yesterdayRegistered = !!appData.records[yesterdayKey()];
+    const isRest = isTodayRestDay();
 
-    if (todayRegistered && yesterdayRegistered) {
+    // Si es día de descanso o ya registró todo, deshabilitar visualmente
+    if ((todayRegistered && yesterdayRegistered) || isRest) {
         btn.classList.add('disabled');
     } else {
         btn.classList.remove('disabled');
@@ -496,7 +514,6 @@ function renderGallery() {
         const item = document.createElement('div');
         item.className = 'gallery-item';
 
-        // Aplicar tier al marco según la racha en ese día
         const streakNum = getStreakNumberAtDay(key);
         const tier = getTier(streakNum);
         if (tier > 0) item.classList.add(`tier-${tier}`);
@@ -536,27 +553,23 @@ function renderAll() {
     renderRestDays();
 }
 
-// ---------- NAVEGACIÓN ENTRE PANTALLAS (con slide) ----------
+// ---------- NAVEGACIÓN ----------
 function showScreen(screenId) {
     const currentScreen = document.querySelector('.screen.active');
     const newScreen = document.getElementById(screenId);
     if (!newScreen || currentScreen === newScreen) return;
 
-    // Determinar dirección del slide según orden
     const currentIndex = SCREEN_ORDER.indexOf(currentScreen.id);
     const newIndex = SCREEN_ORDER.indexOf(screenId);
     const slideClass = newIndex > currentIndex ? 'slide-in-right' : 'slide-in-left';
 
-    // Cambiar pantalla
     currentScreen.classList.remove('active');
     newScreen.classList.add('active', slideClass);
 
-    // Limpiar la animación después
     setTimeout(() => {
         newScreen.classList.remove('slide-in-right', 'slide-in-left');
     }, 300);
 
-    // Actualizar nav buttons
     document.querySelectorAll('.nav-btn').forEach(btn => {
         if (btn.dataset.screen === screenId) {
             btn.classList.add('active');
@@ -565,7 +578,6 @@ function showScreen(screenId) {
         }
     });
 
-    // Refrescar contenido
     if (screenId === 'calendar-screen') renderCalendar();
     if (screenId === 'gallery-screen') renderGallery();
     if (screenId === 'home-screen') {
@@ -573,7 +585,6 @@ function showScreen(screenId) {
         animateGreeting();
     }
 
-    // Aura solo en home
     const aura = document.getElementById('background-aura');
     if (screenId === 'home-screen') {
         aura.classList.remove('hidden');
@@ -582,6 +593,9 @@ function showScreen(screenId) {
     } else {
         aura.classList.add('hidden');
     }
+
+    // Actualizar overlay de descanso
+    updateRestDayOverlay();
 }
 
 // ---------- MODALES ----------
@@ -641,6 +655,8 @@ function openGalleryModal(dateKey) {
     downloadLink.href = record.photo;
     downloadLink.download = `gym-${dateKey}.jpg`;
 
+    document.getElementById('gallery-modal-delete').dataset.key = dateKey;
+
     openModal('gallery-modal');
 }
 
@@ -656,7 +672,7 @@ function showToast(message, duration = 2500) {
     }, duration);
 }
 
-// ---------- SONIDO DE LEVEL UP (sintetizado con Web Audio API) ----------
+// ---------- SONIDO LEVEL UP ----------
 function playLevelUpSound() {
     try {
         const AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -664,9 +680,7 @@ function playLevelUpSound() {
 
         const ctx = new AudioContext();
         const now = ctx.currentTime;
-
-        // Tres notas ascendentes: do, mi, sol (acorde mayor)
-        const notes = [523.25, 659.25, 783.99]; // C5, E5, G5
+        const notes = [523.25, 659.25, 783.99];
 
         notes.forEach((freq, i) => {
             const osc = ctx.createOscillator();
@@ -708,18 +722,33 @@ function showLevelUpModal(tier) {
     playLevelUpSound();
 }
 
-// ---------- REGISTRO DE DÍA ----------
+// ---------- REGISTRO ----------
 function startRegister() {
     if (isRegistering) return;
+
+    // Si hoy es día de descanso → bloquear
+    if (isTodayRestDay()) {
+        // Cambia el texto del overlay aleatoriamente para que se note
+        updateRestDayOverlay();
+        showToast('Hoy es día de descanso 😴');
+        return;
+    }
 
     const todayK = todayKey();
     const yesterdayK = yesterdayKey();
 
     const todayRegistered = !!appData.records[todayK];
     const yesterdayRegistered = !!appData.records[yesterdayK];
+    const yesterdayWasRest = isYesterdayRestDay();
 
-    if (todayRegistered && yesterdayRegistered) {
-        showToast('Ya registraste hoy y ayer.');
+    if (todayRegistered && (yesterdayRegistered || yesterdayWasRest)) {
+        showToast('Ya registraste todo lo que podías.');
+        return;
+    }
+
+    // Si ayer era descanso, no se puede registrar ayer
+    if (todayRegistered && yesterdayWasRest) {
+        showToast('Ayer fue día de descanso.');
         return;
     }
 
@@ -729,7 +758,7 @@ function startRegister() {
         return;
     }
 
-    if (!todayRegistered && yesterdayRegistered) {
+    if (!todayRegistered && (yesterdayRegistered || yesterdayWasRest)) {
         pendingDate = todayK;
         triggerCamera();
         return;
@@ -757,7 +786,7 @@ function handlePhotoSelected(event) {
         compressImage(dataUrl, 1080, 0.75).then(compressed => {
             saveRecord(targetDate, compressed);
         }).catch(err => {
-            console.error('Error comprimiendo imagen:', err);
+            console.error('Error comprimiendo:', err);
             saveRecord(targetDate, dataUrl);
         });
     };
@@ -765,7 +794,6 @@ function handlePhotoSelected(event) {
 }
 
 function saveRecord(dateKey, photoData) {
-    // Capturar tier ANTES del registro (para detectar level up)
     const previousStreak = calculateCurrentStreak();
     const previousTier = getTier(previousStreak);
 
@@ -774,13 +802,10 @@ function saveRecord(dateKey, photoData) {
         createdAt: new Date().toISOString(),
     };
 
-    if (!appData.startDate) {
-        appData.startDate = dateKey;
-    }
+    if (!appData.startDate) appData.startDate = dateKey;
 
     saveData();
 
-    // Calcular nuevo tier
     const newStreak = calculateCurrentStreak();
     const newTier = getTier(newStreak);
     appData.lastKnownTier = newTier;
@@ -793,7 +818,6 @@ function saveRecord(dateKey, photoData) {
     pendingDate = null;
     isRegistering = false;
 
-    // Detectar level up
     setTimeout(() => {
         checkLevelUp(previousTier, newTier);
     }, 600);
@@ -828,17 +852,34 @@ function compressImage(dataUrl, maxWidth = 1080, quality = 0.75) {
     });
 }
 
-function deleteRecord(dateKey) {
-    if (!appData.records[dateKey]) return;
-    delete appData.records[dateKey];
+// ---------- BORRADO CON CONFIRMACIÓN ----------
+function requestDelete(dateKey, source) {
+    pendingDeleteKey = dateKey;
+    pendingDeleteSource = source;
+    openModal('confirm-delete-modal');
+}
 
-    // Recalcular tier conocido
+function confirmDelete() {
+    if (!pendingDeleteKey) return;
+
+    const key = pendingDeleteKey;
+    const source = pendingDeleteSource;
+
+    delete appData.records[key];
     appData.lastKnownTier = getTier(calculateCurrentStreak());
-
     saveData();
     renderAll();
-    closeModal('day-modal');
-    showToast('Registro borrado');
+
+    closeModal('confirm-delete-modal');
+
+    // Cerrar también el modal de origen
+    if (source === 'gallery') closeModal('gallery-modal');
+    if (source === 'day') closeModal('day-modal');
+
+    pendingDeleteKey = null;
+    pendingDeleteSource = null;
+
+    showToast('Foto borrada');
 }
 
 // ---------- DÍAS DE DESCANSO ----------
@@ -862,7 +903,7 @@ function resetAllData() {
     showToast('Todos los datos fueron borrados');
 }
 
-// ---------- INICIALIZACIÓN ----------
+// ---------- INIT ----------
 function init() {
     const now = new Date().getFullYear();
     if (now >= 2026 && now <= 2027) {
@@ -871,7 +912,6 @@ function init() {
         currentYear = 2026;
     }
 
-    // Navegación inferior
     document.querySelectorAll('.nav-btn').forEach(btn => {
         btn.addEventListener('click', () => {
             const screenId = btn.dataset.screen;
@@ -879,10 +919,8 @@ function init() {
         });
     });
 
-    // Botón registrar
     document.getElementById('register-btn').addEventListener('click', startRegister);
 
-    // Modal hoy/ayer
     document.getElementById('register-today').addEventListener('click', () => {
         pendingDate = todayKey();
         closeModal('register-modal');
@@ -898,10 +936,8 @@ function init() {
         closeModal('register-modal');
     });
 
-    // Cámara
     document.getElementById('camera-input').addEventListener('change', handlePhotoSelected);
 
-    // Selector año
     document.getElementById('prev-year').addEventListener('click', () => {
         if (currentYear > 2026) {
             currentYear--;
@@ -915,31 +951,36 @@ function init() {
         }
     });
 
-    // Modal día
+    // Modal día (calendario)
     document.getElementById('day-modal-close').addEventListener('click', () => closeModal('day-modal'));
     document.getElementById('day-modal-delete').addEventListener('click', (e) => {
         const key = e.target.dataset.key;
-        if (key && confirm('¿Seguro que querés borrar este día? Se eliminará la foto y el registro.')) {
-            deleteRecord(key);
-        }
+        if (key) requestDelete(key, 'day');
     });
 
-    // Modal galería
+    // Modal galería (con borrar)
     document.getElementById('gallery-modal-close').addEventListener('click', () => closeModal('gallery-modal'));
+    document.getElementById('gallery-modal-delete').addEventListener('click', (e) => {
+        const key = e.target.dataset.key;
+        if (key) requestDelete(key, 'gallery');
+    });
 
-    // Modal level up
+    // Modal confirmación borrado
+    document.getElementById('confirm-delete-yes').addEventListener('click', confirmDelete);
+    document.getElementById('confirm-delete-no').addEventListener('click', () => {
+        pendingDeleteKey = null;
+        pendingDeleteSource = null;
+        closeModal('confirm-delete-modal');
+    });
+
     document.getElementById('levelup-continue').addEventListener('click', () => closeModal('levelup-modal'));
 
-    // Cerrar modales al tocar fuera
     document.querySelectorAll('.modal').forEach(modal => {
         modal.addEventListener('click', (e) => {
-            if (e.target === modal) {
-                modal.classList.remove('active');
-            }
+            if (e.target === modal) modal.classList.remove('active');
         });
     });
 
-    // Días de descanso
     document.querySelectorAll('.rest-day-btn').forEach(btn => {
         btn.addEventListener('click', () => {
             const day = parseInt(btn.dataset.day);
@@ -947,18 +988,12 @@ function init() {
         });
     });
 
-    // Reset
     document.getElementById('reset-btn').addEventListener('click', () => openModal('reset-modal'));
     document.getElementById('reset-confirm').addEventListener('click', resetAllData);
     document.getElementById('reset-cancel').addEventListener('click', () => closeModal('reset-modal'));
 
-    // Frase del día
     showDailyQuote();
-
-    // Renderizar todo
     renderAll();
-
-    // Animación inicial del saludo
     animateGreeting();
 }
 
