@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#0b2124">
+    <title>Gym Tracker</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Pantalla principal / Inicio -->
+    <section id="home-screen" class="screen active">
+        <header class="home-header">
+            <h1>GYM TRACKER</h1>
+        </header>
+
+        <div class="stats-container">
+            <div class="stat-card streak-card">
+                <span class="stat-label">Racha actual</span>
+                <span class="stat-value" id="current-streak">0</span>
+                <span class="stat-unit">días</span>
+            </div>
+
+            <div class="stats-row">
+                <div class="stat-card small">
+                    <span class="stat-label">Racha máxima</span>
+                    <span class="stat-value" id="max-streak">0</span>
+                </div>
+                <div class="stat-card small">
+                    <span class="stat-label">Total días</span>
+                    <span class="stat-value" id="total-days">0</span>
+                </div>
+            </div>
+        </div>
+
+        <button class="register-button" id="register-btn">
+            <span class="register-icon">+</span>
+            <span>REGISTRAR DÍA</span>
+        </button>
+
+        <nav class="bottom-nav">
+            <button class="nav-btn active" data-screen="home-screen">
+                <span class="nav-icon">⌂</span>
+                <span>Inicio</span>
+            </button>
+            <button class="nav-btn" data-screen="calendar-screen">
+                <span class="nav-icon">▦</span>
+                <span>Calendario</span>
+            </button>
+            <button class="nav-btn" data-screen="gallery-screen">
+                <span class="nav-icon">▣</span>
+                <span>Galería</span>
+            </button>
+            <button class="nav-btn" data-screen="settings-screen">
+                <span class="nav-icon">⚙</span>
+                <span>Ajustes</span>
+            </button>
+        </nav>
+    </section>
+
+    <!-- Pantalla de calendario -->
+    <section id="calendar-screen" class="screen">
+        <header class="screen-header">
+            <h2>Calendario</h2>
+            <div class="year-selector">
+                <button id="prev-year">‹</button>
+                <span id="current-year">2026</span>
+                <button id="next-year">›</button>
+            </div>
+        </header>
+
+        <div class="calendar-legend">
+            <div class="legend-item">
+                <span class="legend-dot registered"></span>
+                <span>Registrado</span>
+            </div>
+            <div class="legend-item">
+                <span class="legend-dot rest"></span>
+                <span>Descanso</span>
+            </div>
+            <div class="legend-item">
+                <span class="legend-dot missed"></span>
+                <span>No fui</span>
+            </div>
+        </div>
+
+        <div class="calendar-container" id="calendar-container">
+            <!-- Los meses se generan con JS -->
+        </div>
+
+        <nav class="bottom-nav">
+            <button class="nav-btn" data-screen="home-screen">
+                <span class="nav-icon">⌂</span>
+                <span>Inicio</span>
+            </button>
+            <button class="nav-btn active" data-screen="calendar-screen">
+                <span class="nav-icon">▦</span>
+                <span>Calendario</span>
+            </button>
+            <button class="nav-btn" data-screen="gallery-screen">
+                <span class="nav-icon">▣</span>
+                <span>Galería</span>
+            </button>
+            <button class="nav-btn" data-screen="settings-screen">
+                <span class="nav-icon">⚙</span>
+                <span>Ajustes</span>
+            </button>
+        </nav>
+    </section>
+
+    <!-- Pantalla de galería -->
+    <section id="gallery-screen" class="screen">
+        <header class="screen-header">
+            <h2>Galería</h2>
+        </header>
+
+        <div class="gallery-grid" id="gallery-grid">
+            <!-- Las fotos se generan con JS -->
+        </div>
+
+        <div class="gallery-empty" id="gallery-empty">
+            <p>Todavía no hay fotos.</p>
+            <p class="subtitle">Registrá tu primer día de gym para empezar.</p>
+        </div>
+
+        <nav class="bottom-nav">
+            <button class="nav-btn" data-screen="home-screen">
+                <span class="nav-icon">⌂</span>
+                <span>Inicio</span>
+            </button>
+            <button class="nav-btn" data-screen="calendar-screen">
+                <span class="nav-icon">▦</span>
+                <span>Calendario</span>
+            </button>
+            <button class="nav-btn active" data-screen="gallery-screen">
+                <span class="nav-icon">▣</span>
+                <span>Galería</span>
+            </button>
+            <button class="nav-btn" data-screen="settings-screen">
+                <span class="nav-icon">⚙</span>
+                <span>Ajustes</span>
+            </button>
+        </nav>
+    </section>
+
+    <!-- Pantalla de ajustes -->
+    <section id="settings-screen" class="screen">
+        <header class="screen-header">
+            <h2>Ajustes</h2>
+        </header>
+
+        <div class="settings-content">
+            <div class="settings-block">
+                <h3>Días de descanso</h3>
+                <p class="settings-description">Marcá los días de la semana en los que no vas al gym.</p>
+                <div class="rest-days-grid">
+                    <button class="rest-day-btn" data-day="1">Lun</button>
+                    <button class="rest-day-btn" data-day="2">Mar</button>
+                    <button class="rest-day-btn" data-day="3">Mié</button>
+                    <button class="rest-day-btn" data-day="4">Jue</button>
+                    <button class="rest-day-btn" data-day="5">Vie</button>
+                    <button class="rest-day-btn" data-day="6">Sáb</button>
+                    <button class="rest-day-btn" data-day="0">Dom</button>
+                </div>
+            </div>
+
+            <div class="settings-block">
+                <h3>Datos</h3>
+                <button class="danger-button" id="reset-btn">Borrar todos los datos</button>
+            </div>
+
+            <div class="settings-block info-block">
+                <p>Gym Tracker</p>
+                <p class="version">v1.0</p>
+            </div>
+        </div>
+
+        <nav class="bottom-nav">
+            <button class="nav-btn" data-screen="home-screen">
+                <span class="nav-icon">⌂</span>
+                <span>Inicio</span>
+            </button>
+            <button class="nav-btn" data-screen="calendar-screen">
+                <span class="nav-icon">▦</span>
+                <span>Calendario</span>
+            </button>
+            <button class="nav-btn" data-screen="gallery-screen">
+                <span class="nav-icon">▣</span>
+                <span>Galería</span>
+            </button>
+            <button class="nav-btn active" data-screen="settings-screen">
+                <span class="nav-icon">⚙</span>
+                <span>Ajustes</span>
+            </button>
+        </nav>
+    </section>
+
+    <!-- Modal: Registrar día (elegir hoy o ayer) -->
+    <div class="modal" id="register-modal">
+        <div class="modal-content">
+            <h3>¿Qué día querés registrar?</h3>
+            <button class="modal-btn primary" id="register-today">Hoy</button>
+            <button class="modal-btn primary" id="register-yesterday">Ayer</button>
+            <button class="modal-btn cancel" id="register-cancel">Cancelar</button>
+        </div>
+    </div>
+
+    <!-- Input oculto para la cámara -->
+    <input type="file" id="camera-input" accept="image/*" capture="environment" style="display:none">
+
+    <!-- Modal: Ver foto del día -->
+    <div class="modal" id="day-modal">
+        <div class="modal-content full">
+            <button class="modal-close" id="day-modal-close">×</button>
+            <h3 id="day-modal-date"></h3>
+            <div class="modal-image-container">
+                <img id="day-modal-image" src="" alt="Foto del día">
+            </div>
+            <div class="modal-actions">
+                <button class="modal-btn cancel" id="day-modal-delete">Borrar registro</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Ver foto de galería -->
+    <div class="modal" id="gallery-modal">
+        <div class="modal-content full">
+            <button class="modal-close" id="gallery-modal-close">×</button>
+            <h3 id="gallery-modal-date"></h3>
+            <div class="modal-image-container">
+                <img id="gallery-modal-image" src="" alt="Foto">
+            </div>
+            <div class="modal-actions">
+                <a id="gallery-modal-download" class="modal-btn primary" download>Descargar</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Confirmar reset -->
+    <div class="modal" id="reset-modal">
+        <div class="modal-content">
+            <h3>¿Borrar todos los datos?</h3>
+            <p class="modal-description">Esto va a eliminar todas las fotos, registros y configuraciones. No se puede deshacer.</p>
+            <button class="modal-btn cancel" id="reset-confirm">Sí, borrar todo</button>
+            <button class="modal-btn primary" id="reset-cancel">Cancelar</button>
+        </div>
+    </div>
+
+    <!-- Toast de notificaciones -->
+    <div class="toast" id="toast"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
